@@ -1,0 +1,186 @@
+0:00
+You've seen how PyTorch emerged from researchers' frustration with complicated tools,
+0:04
+and why it's become one of the leading frameworks for building neural networks.
+0:08
+But now, it's time to understand what you're actually building.
+0:11
+Let's ground this with a problem,
+0:13
+one that you're going to revisit later when you train a model to solve it.
+0:16
+Say you work for a local delivery company that promises to get orders to customers within 30 minutes,
+0:21
+and you may make those deliveries by bike.
+0:23
+Last month, you were late three times.
+0:25
+Your manager wasn't very happy.
+0:27
+One more late delivery, and your job could be at risk.
+0:29
+Now, a new order comes in, the customer wants something delivered seven miles away.
+0:34
+Do you take the job? Can you get there in under 30 minutes?
+0:37
+If you're already comfortable with the way neurons model linear equations,
+0:41
+and learn by reducing error, you can feel free to skip this video.
+0:44
+But if you're new to this material, and you'd like a quick refresher, stick around.
+0:47
+So neural networks are great at solving problems like this, if they have the data.
+0:52
+And you're going to tackle this one using the simplest kind of neural network possible,
+0:56
+just one neuron.
+0:57
+And since complex networks are really just many neurons doing the same basic operation,
+1:02
+understanding how one neuron works gives you the foundation for all of them.
+1:06
+And while this is inspired by biology, neurons in this context are just mathematical units.
+1:12
+They're tools with adjustable parameters that shift to match the patterns in your data.
+1:16
+It's more intuitive than it sounds.
+1:18
+Let me show you.
+1:19
+Here's some historical delivery data. Can you see an underlying pattern?
+1:23
+5 miles took 22.2 minutes.
+1:26
+6 miles took 25.6.
+1:28
+Now imagine a customer wants something that's delivered 7 miles away.
+1:32
+Let's plot the data, and let's see what's actually happening.
+1:35
+Notice how the points follow a straight line.
+1:37
+A good predictive model for this data would be, well, a line.
+1:40
+If you know the equation for that line, you can then predict new values.
+1:44
+And here's the key insight.
+1:46
+A single neuron is just a linear equation with two parameters, the weight and the bias.
+1:51
+And the math will look like this.
+1:53
+That's just the equation for a straight line.
+1:56
+So all the neuron needs to do is to find the right values for W and B
+2:00
+to create the best fitting line through all of your data.
+2:04
+And that search for those best values, that's the learning in machine learning.
+2:08
+So the question then becomes, how does a neuron figure out which line is best?
+2:12
+So let's just start with a rough guess.
+2:14
+We'll start by guessing weight is 1 and bias is 10.
+2:17
+So then if I try to predict the delivery time for 5 miles, I'll get 1 times 5 plus 10 is 15 minutes.
+2:24
+But in the real data, we could see that 5 miles took 22.2 minutes.
+2:28
+So I'm off by more than 7 minutes.
+2:31
+Looks like I need a steeper slope.
+2:33
+So let's try weight equals 3.4 and bias equals 5.
+2:37
+3.4 times 5 plus 5 is 22 minutes.
+2:40
+And now we're almost spot on.
+2:42
+We're just 0.2 minutes off.
+2:44
+It's a much better fit.
+2:45
+Just like I looked at the error a moment ago and I thought,
+2:48
+hmm, the weight needs to go up and the bias needs to go up and I need to change my slope,
+2:52
+the neural network makes those same kind of decisions, but using math instead of intuition.
+2:57
+It starts with random values for the weight and bias.
+2:59
+And in PyTorch, these are called your model's parameters.
+3:03
+Then it will look at how far off each prediction is from the actual data.
+3:07
+The further off the points are, the bigger the total error.
+3:10
+The network will then use calculus to figure out which direction to adjust the weight and the bias.
+3:15
+It's essentially asking, if I increase the weight just a little,
+3:19
+does the error go up or does it go down?
+3:21
+And then once it's figured all that out, it will take a small step in the right direction,
+3:25
+measure that error, adjust slightly, and continually repeat.
+3:29
+Now it could do this hundreds or maybe even thousands of times,
+3:32
+but eventually it will find values close to the best possible ones.
+3:36
+And in PyTorch, you'll see all of this happen with just a few lines of code.
+3:40
+But then you might be wondering, what happens when you start connecting
+3:43
+thousands or even millions of these neurons together?
+3:45
+Does the math get impossibly complex?
+3:48
+Well, here's the surprising thing. It stays linear.
+3:51
+Each neuron is still doing that same basic calculation.
+3:54
+Let me show you how a neuron handles multiple inputs.
+3:58
+Our delivery problem neuron had only one input, distance.
+4:01
+But what if you wanted to consider multiple factors, say, distance, time of day, and weather?
+4:06
+A neuron with three inputs will just extend the same pattern.
+4:10
+It's all still just a linear equation. It's just more terms being added together.
+4:14
+Each input gets its own unique weight, they all add up, plus the single bias value.
+4:19
+And that's really all a neural network is. Neurons connected to neurons.
+4:24
+A layer is simply a group of neurons that all take the same inputs.
+4:27
+When you connect one layer's outputs to the next layer's inputs, you've now built a network.
+4:32
+The first layer can take in your raw data, like the distance, the time of day, and the weather.
+4:37
+The last layer gives your prediction, like the delivery time.
+4:40
+All those layers in between, we call them hidden layers,
+4:43
+because you never directly set or see their values.
+4:46
+Soon, you'll see how easy it is to stack these layers together in PyTorch.
+4:50
+But for now, let's just continue with just one neuron.
+4:52
+In the next video, you'll see this complete pipeline
+4:55
+and how you'll go from raw data to a deployed model.
+4:58
+It's the systematic process that every PyTorch project follows.
+5:01
+After that, you'll build your first neural network,
+5:04
+and you'll train it on this exact delivery problem.
+5:07
+Just a few lines of PyTorch code will bring all of these concepts to life.
+5:11
+So let's keep going!

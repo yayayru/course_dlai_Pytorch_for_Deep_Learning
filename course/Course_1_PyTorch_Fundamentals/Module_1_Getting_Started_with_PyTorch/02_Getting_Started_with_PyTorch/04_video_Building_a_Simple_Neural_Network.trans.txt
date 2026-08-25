@@ -1,0 +1,210 @@
+0:00
+You've seen the machine learning pipeline and you can understand how neural networks learn.
+0:04
+Now, let's take a look at how it all maps to actual PyTorch code.
+0:08
+Let's start with the imports.
+0:09
+These will give you PyTorch's core functionality, torch,
+0:12
+components for building neural networks, nn,
+0:16
+and tools for training these networks, optim.
+0:18
+But now, let's talk about your data.
+0:21
+In real projects, data ingestion and data preparation are separate steps.
+0:26
+First, you gather messy data and then you clean and format it.
+0:29
+But for this example, I've combined those stages
+0:32
+and provided data that's already clean and ready for you to use.
+0:35
+You're creating them from Python lists, but they're more than just lists.
+0:39
+Tensors are optimized for the math that neural networks need to do.
+0:43
+Now, you'll learn much more about them later,
+0:44
+but for right now, just think of them as containers
+0:48
+that store and organize data in a way that models understand.
+0:51
+Now, we'll take a look at how each number is wrapped in its own set of brackets.
+0:56
+These outer brackets represent a subset of your entire data set,
+1:00
+a collection of individual data points.
+1:02
+This collection is called a batch.
+1:04
+Each inner set of brackets is one sample in the batch.
+1:08
+Since you have four delivery records, you'll see four samples,
+1:12
+each wrapped in its own brackets.
+1:13
+And since each delivery only has one feature, distance,
+1:17
+each sample will just contain one value.
+1:19
+But remember earlier when I talked about data with multiple inputs,
+1:24
+like distance, time of day, or weather.
+1:26
+And that's where these brackets can become really important.
+1:29
+Each sample might hold several values, one for each input feature.
+1:34
+So even if there's just one or maybe hundreds of features,
+1:37
+these brackets will tell PyTorch where one sample ends and the next one begins.
+1:43
+Lastly, notice this part where it says dtype equals torch.float32.
+1:48
+This tells PyTorch what kind of numbers to store.
+1:51
+And in this case, it's 32-bit floating point numbers,
+1:54
+perfect for the decimal values in our delivery times.
+1:57
+Now, let's create your neural network.
+2:00
+Remember those rigid assembly lines from early deep learning frameworks?
+2:04
+Sequential is PyTorch's streamlined version.
+2:07
+It's a container that passes data through layers in order,
+2:10
+but makes it easy for you to swap components without all of that messy rewiring.
+2:14
+Here, you're only using one layer.
+2:16
+And this is your single neuron.
+2:18
+It's technically a linear layer.
+2:20
+This first one means it takes one input, and that's going to be our distance.
+2:24
+The second one means that it produces only one output,
+2:27
+and that will be our predicted delivery time.
+2:29
+It applies a linear transformation to the input,
+2:32
+and that's all the linear layer actually does.
+2:34
+PyTorch makes all of this easy.
+2:36
+Layers like this are built into the framework,
+2:38
+and you can create them with just a single line of code.
+2:41
+This neuron will learn the best weight and the best bias
+2:45
+to map our distances to our delivery times,
+2:47
+just like finding the best fitting line through all of our data points.
+2:50
+Now your model needs two tools to actually learn.
+2:53
+The first is the loss function,
+2:55
+and we're using one called mean squared error loss.
+2:58
+This will measure how wrong or how right your predictions are.
+3:01
+But if you predict 45 minutes when it actually took 60,
+3:05
+that's a bigger error than, say, predicting 58 minutes.
+3:08
+The optimizer SGD, which stands for stochastic gradient descent,
+3:13
+is the algorithm that figures out which direction
+3:16
+to adjust your weight and bias to reduce that error.
+3:18
+model.parameters is how you access those values in PyTorch,
+3:22
+which in this case is just the weight and bias from your single neuron.
+3:25
+lr is the learning rate.
+3:27
+Smaller values mean you adjust your weight and bias parameters by smaller amounts.
+3:32
+Larger values mean bigger adjustments.
+3:34
+Both extremes can have their own challenges.
+3:36
+If you're curious about the math behind loss functions or optimization,
+3:40
+you'll get a much deeper introduction in Module 2.
+3:42
+You'll also find more in the course resources,
+3:45
+or you can explore the deep learning specialization for a full deep dive.
+3:49
+Okay, this is the training loop where the actual learning happens.
+3:53
+Remember when I manually adjusted the weight and bias to get closer to the right line?
+3:58
+This code is doing the same thing automatically hundreds of times.
+4:01
+In fact, it will do it for 500 times.
+4:04
+Each full pass through the training data is called an epoch.
+4:07
+In each epoch, the model will, one, make predictions,
+4:12
+two, measure how far off those predictions are,
+4:15
+and three, adjust its internal parameters to improve on those predictions.
+4:19
+And here's what each line is doing.
+4:21
+First, let's look at optimizer.zero_grad().
+4:24
+You'll hear much more about this method later in the course,
+4:27
+but for now, just know that it clears out all of the calculated values
+4:31
+from the previous training round.
+4:32
+Without it, PyTorch would accumulate adjustments across rounds,
+4:36
+which would mess up all of your learning.
+4:38
+This line, outputs equals model(inputs), tells the model to use the distance as inputs.
+4:44
+loss equals loss_function(outputs, times) compares the predictions to the real times
+4:49
+and calculates just how wrong they are.
+4:51
+loss.backward figures out how to adjust the weight and bias to reduce that error.
+4:56
+Just like remember when I said I need a steeper slope for predicting delivery times,
+5:01
+it's now done with the calculus behind the scenes.
+5:03
+The technical term for this process is called backpropagation.
+5:07
+optimizer.step will make all of those adjustments.
+5:10
+Now that the model is trained, let's try making a prediction.
+5:13
+The line with torch.no_grad() tells PyTorch that you're not training anymore,
+5:18
+just doing inference.
+5:20
+Training takes extra work under the hood,
+5:22
+but for inference, we can skip all of that and run much more efficiently.
+5:26
+And if the model learned what it was supposed to, it should give you a good answer.
+5:29
+But you're going to have to try it out in the lab to see for yourself.
+5:32
+And speaking of building, that's exactly what's next.
+5:35
+It's time to get hands-on and see if your delivery job is still safe.

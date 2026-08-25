@@ -1,0 +1,154 @@
+0:00
+In the last video, you learned how to create, reshape, and debug tensors.
+0:04
+Now let's see how PyTorch actually computes with them.
+0:07
+Let's start with a computation from your single neuron model.
+0:11
+Weight times distance plus bias.
+0:13
+And here's what that looks like when you have multiple distances to process.
+0:17
+PyTorch's tensor math works element-wise, so each element is operated on independently.
+0:23
+Your computation applies the same weight to each distance,
+0:26
+and then adds the same bias to each result.
+0:29
+The math looks just like regular Python,
+0:31
+but PyTorch runs these operations efficiently on all elements at once.
+0:36
+This works for scalars, which are single values, as well as tensors that have the same shape.
+0:41
+But what if you have more complex data?
+0:43
+Imagine three deliveries where each has three features, distance, hour, and weather.
+0:47
+And now you want to apply adjustment factors.
+0:50
+Maybe 1.1x for distance, no change for time, and a 5x penalty for bad weather.
+0:56
+Creating that tensor with repeated 1.1, 1.0, 5.0 rows
+1:01
+works because the tensors have the same shape, but it's redundant.
+1:05
+Wouldn't it be nice if you could just specify those adjustment values once?
+1:09
+And that's where broadcasting comes in.
+1:11
+You know that tensors with the same shape will work element by element,
+1:15
+but remember how a scalar could update every value in our distance tensor.
+1:20
+When you add a scalar to a tensor,
+1:22
+PyTorch automatically expands that single value to match every element.
+1:27
+And that's how weight and bias could apply to all of your distances at once.
+1:31
+This automatic expansion is broadcasting in action.
+1:34
+But what about if we have something like 5 — a tensor with shape [1, 1]?
+1:39
+Do you think it will work with our shape [1, 3] tensor?
+1:42
+Well, the first tensor has shape [1, 3] — 1 row, 3 values.
+1:47
+The second has shape [1, 1] — 1 row, 1 value.
+1:51
+Normally, PyTorch requires exact dimension matches for operations.
+1:55
+Different shapes would cause an error.
+1:57
+But here's the magic.
+1:58
+When one dimension is 1 and the other is larger,
+2:01
+PyTorch will automatically expand the smaller dimension by repeating values.
+2:05
+So our size [1, 1] tensor becomes [5, 5, 5], matching the [1, 3] shape.
+2:11
+And now they can be added together.
+2:13
+Let's look at a more complex example that shows broadcasting's real power.
+2:17
+What happens when you combine a [1, 3] tensor with a [3, 1] tensor?
+2:21
+Take a moment to think about how this will work.
+2:24
+Well, here's what happens.
+2:25
+PyTorch looks at each dimension.
+2:27
+The first dimension, 1 versus 3.
+2:30
+The 1 expands to 3.
+2:32
+The second dimension, 3 versus 1.
+2:34
+Well, guess what?
+2:35
+The 1 expands to 3.
+2:37
+So both become [3, 3].
+2:39
+So how would you actually use this?
+2:40
+Well, remember those delivery adjustments?
+2:43
+Instead of repeating 1.1, 1.0, 5.0 three times, you can just write this.
+2:49
+No loops.
+2:50
+No manual repetition.
+2:51
+PyTorch handles it all through broadcasting.
+2:54
+And this pattern appears everywhere.
+2:56
+Adjusting multiple features across batches.
+2:59
+Combining different dimensions of data.
+3:01
+Applying transformations efficiently.
+3:03
+So many places.
+3:04
+Once you know to look for it,
+3:06
+you're going to see broadcasting opportunities everywhere in deep learning.
+3:09
+Now you've covered essential tensor operations over the last two videos.
+3:13
+The provided lab has additional examples that you can explore.
+3:17
+Because like any tool, tensors will become intuitive through practice.
+3:22
+But most importantly, you're at the end of Module 1.
+3:25
+Congratulations!
+3:26
+We started by exploring what makes PyTorch special.
+3:29
+And now you've learned the fundamentals.
+3:31
+You've worked through the machine learning pipeline.
+3:34
+You've trained your first neural network.
+3:36
+You've mastered tensor operations.
+3:38
+You've built the foundation.
+3:40
+Up next is the tensor lab, where you'll practice these concepts.
+3:44
+Followed by a graded assignment to test your skills.
+3:47
+Then in Module 2, you're going to tackle classification problems.
+3:51
+And dive deeper into how neural networks really learn.
+3:55
+You've mastered PyTorch fundamentals.
+3:57
+It's time to put them to work.

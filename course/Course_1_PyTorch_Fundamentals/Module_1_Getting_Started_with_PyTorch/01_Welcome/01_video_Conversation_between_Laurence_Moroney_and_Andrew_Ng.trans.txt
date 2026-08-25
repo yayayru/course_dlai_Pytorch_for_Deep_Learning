@@ -1,0 +1,92 @@
+0:00
+Welcome to PyTorch Fundamentals, the first course in the PyTorch for Deep Learning
+0:04
+Professional Certificate. PyTorch has become one of the most widely used frameworks in AI,
+0:09
+and is a tool that researchers rely on, engineers build with, and students and professionals
+0:15
+everywhere want to learn. In fact, a large part of the recent generative AI revolution
+0:20
+is powered by PyTorch. But the path to learning it isn't always clear. There are tutorials
+0:25
+everywhere and it can be hard to know what's relevant and what's high quality when you're
+0:29
+just starting out. That's why we put together this clear, structured path for learning PyTorch.
+0:35
+You start at the fundamentals and then build up to more advanced architectures step by step.
+0:40
+And I'm excited to introduce Lawrence Moroney, whose courses and books have helped most people
+0:45
+get started with AI and deep learning. Lawrence has been working with PyTorch extensively for
+0:51
+many years and seen how it's changing the way we build models. So Lawrence,
+0:56
+what got you excited about teaching PyTorch? I think one of the things that when I first
+0:59
+really started looking at PyTorch is that, remember way back you and I, we did some
+1:04
+TensorFlow specializations and TensorFlow courses. And one of the most beloved ones was we did
+1:09
+something called the Keras Functional API. And what the Keras Functional API did was it changed
+1:14
+everything for me in that you weren't designing your models to be linear. You could start thinking
+1:19
+about more exotic models with like Siamese networks and skip level and stuff like that.
+1:24
+And when I started then looking into PyTorch, PyTorch just did that natively.
+1:28
+How you design your network and how you design your forward pass in code, it just made it simple
+1:33
+and it was like the default experience rather than an add-on experience. And that got me really,
+1:38
+really excited about like, wow, I can start really building much more advanced models,
+1:43
+much more simply. That's what I love about this first course is that we're going to start
+1:47
+building right away. We're going to just look at our first PyTorch model. We'll write the code,
+1:51
+we'll run it, we'll watch it learn from data. But by the end, we'll actually have an image
+1:54
+classifier that can label objects in an image. One of the things that Keras did well back then
+2:00
+and now PyTorch is let you put together building blocks that could more easily be put together to
+2:07
+form more complex architectures. I'm just really excited about that, how we can just help learners
+2:13
+on that journey to go from zero all the way up to the most advanced architectures by that block-based
+2:18
+approach that you mentioned. I know a lot of us prompt large language models, it lets you get a
+2:22
+lot done. But beyond a certain point, a lot of my teams do very advanced things with cutting-edge
+2:27
+models, be it fine-tuning, cutting-edge generative AI models, the tuning, very high performance
+2:33
+on visual AI models. So I think in today's world with a lot of work going on in AI, this is a
+2:39
+particularly important skill set. I also want to help you to understand that even if you're just
+2:43
+getting started on your journey, by starting with code, by starting with understanding the
+2:48
+fundamentals and using a powerful framework like PyTorch, it's really setting you up for success
+2:53
+in this world. One other thing that I find delightful about PyTorch is the ease of use
+3:01
+actually makes it more fun. Because when you're playing around, downloading an open-source PyTorch
+3:05
+package, the relative ease with which you could, you know, get the Transformers library from
+3:11
+Hugging Face and fine-tune that, it actually makes it more fun. So in addition to, you know,
+3:15
+finding jobs, which is absolutely important, I find that the speed also just makes this work
+3:21
+more enjoyable. Absolutely agree. And I think that ease of use, not just for building, but also like
+3:27
+when things go wrong, to be able to find and fix problems and debug them, you know, allows you to
+3:31
+be more successful quickly. So with this professional certificate, start with the first course
+3:36
+and the fundamentals, but eventually going up to the professional certificate, I think it'll make
+3:41
+learners much more job ready. I hope you enjoy learning PyTorch. Let's go on to the next video
+3:47
+and get started.

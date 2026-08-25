@@ -1,0 +1,172 @@
+0:01
+Welcome back! In the previous lab, your delivery company expanded from bike-only service to
+0:05
+citywide operations using cars for longer routes. But you discovered something important.
+0:10
+As distances increased, delivery times stopped following a straight line.
+0:15
+So what happened? Why did your model start to fail when you added cars?
+0:19
+Well, it all came down to your model's assumption. A linear model treats every
+0:23
+mile as needing the same amount of time, but in reality, it's much more complicated.
+0:28
+These first few miles beyond bike range hit dense city traffic. And further out,
+0:33
+cars reach highways and move faster. The relationship curves.
+0:37
+So what's the solution? You might think, let's just add more neurons.
+0:40
+If one neuron learns one relationship, maybe multiple neurons can capture more complexity.
+0:45
+But when you have just one neuron, it produces your final prediction, so it is the output layer.
+0:50
+But when you add a second neuron, now you have two outputs from your single input,
+0:54
+and you need a single prediction in your final output.
+0:57
+So you add another neuron to combine these two outputs into one final output.
+1:03
+And now those two neurons are considered a hidden layer.
+1:06
+These two neurons independently calculate the weighted sum from the input.
+1:10
+Let's call their output Z1 and Z2. And your new output neuron takes both of these inputs
+1:16
+and combines them into a single prediction. But here's the problem. That's still just
+1:20
+a linear equation no matter how many neurons you stack like this.
+1:23
+If all operations on a single input are linear, simply multiplying by weights and adding biases,
+1:28
+you'll always end up with a straight line. To learn curves and not just straight lines,
+1:33
+your model needs something more than a linear transformation.
+1:37
+It needs nonlinear activation functions. These functions add just enough complexity
+1:42
+to help the model learn more interesting patterns. In PyTorch, we usually apply them
+1:48
+element-wise to each neuron in a layer, one by one.
+1:51
+Let's look at what that means. A neuron starts by computing a linear transformation of its input,
+1:57
+something like this. But instead of sending that raw number straight out,
+2:01
+we pass it through an activation function like this. And this small change,
+2:06
+adding a nonlinear transformation, is what lets your model learn much richer patterns.
+2:11
+And now let me introduce you to a really important activation function,
+2:15
+ReLU. It's incredibly simple and it's surprisingly powerful. And here's what ReLU does.
+2:21
+If the input is negative, output zero. If the input is positive,
+2:24
+just pass it through unchanged. It's as simple as that.
+2:27
+Don't you just wish that we could ReLU all of those negative things out of our lives?
+2:31
+In PyTorch, it takes just one line to add ReLU to your one neuron model.
+2:36
+Remember the sequential layer type? That's your assembly line where the data flows through all
+2:41
+of those layers in order. Now it goes through the linear layer first and then through ReLU,
+2:45
+which transforms the output. But how can something this simple help us model curves?
+2:50
+Let's take a look at what happens when you add ReLU to your single neuron.
+2:55
+Your neuron will start by computing W times distance plus B.
+2:58
+Without ReLU, this will give you a straight line. But with ReLU,
+3:02
+when W times distance plus B is negative, the output is zero, which is a flat line.
+3:07
+When it's positive, the output follows the line normally.
+3:10
+And look at that. You've just escaped the world of straight lines.
+3:14
+You now have a bend, a corner where the behavior changes.
+3:17
+But here's something crucial. Where does the bend happen?
+3:21
+When ReLU is applied to a neuron's output, the bend occurs where WX plus B equals zero,
+3:27
+which effectively gives us X equals minus B over W, where it stops outputting zero
+3:34
+and starts responding to the input. Now think about your city transportation data.
+3:39
+The pattern doesn't just bend once, it curves, shifting gradually across different distances
+3:46
+as traffic conditions change. So if one neuron gives us one bend,
+3:50
+then maybe multiple neurons will give us multiple bends. So let's find out.
+3:56
+Each neuron has its own weight and bias, and that means that each neuron activates
+4:01
+at a different distance. Picture three neurons all receiving the same distance input.
+4:07
+Neuron one will activate right around three miles where the traffic starts.
+4:11
+Neuron two activates right around eight miles as we're entering the highways.
+4:15
+And neuron three activates at around 15 miles when we're at full highway speeds.
+4:20
+Now here's what happens. Let's add their outputs together.
+4:23
+And their combined output approximates your complex curve.
+4:28
+In PyTorch, this entire model takes just a few lines of Python.
+4:33
+Let's break that down. But notice we only define two linear layers.
+4:37
+In PyTorch, you only code the layers that compute. The input is just your data.
+4:42
+And ReLU, well, that's an activation function that transforms values
+4:46
+and not a separate layer in this count. Your first linear layer is your group of neurons.
+4:51
+The one means one input feature, and that's the distance.
+4:55
+The three means three neurons. So this layer outputs three values.
+5:00
+Each of those outputs passes through a ReLU. Then the second linear layer takes those three
+5:05
+transform values and combines them with a single neuron, producing one final prediction,
+5:11
+your delivery time. And if you want a smoother curve,
+5:14
+just increase the number of neurons in your first layer.
+5:16
+With enough neurons, each learning where to activate and how strongly to contribute,
+5:21
+you can approximate any smooth curve. Your city transportation patterns,
+5:25
+with all of their complexity, can finally be modeled.
+5:28
+Now we've been using ReLU because it's the workhorse of modern deep learning. It's fast,
+5:33
+it's effective, and it's widely used. But it's not the only activation function out there.
+5:38
+Sigmoid, for example, will squash your outputs into a range between zero and one,
+5:43
+and it's great for probabilities. Tanh maps your values to a range between
+5:47
+minus one and plus one, which is really useful for many tasks.
+5:50
+And there's lots of others too. If you want to dive deeper,
+5:53
+there are a number of great resources such as pytorch.org's documentation,
+5:57
+and of course, other deeplearning.ai specializations.
+6:00
+But honestly, for most situations, ReLU is all you need.
+6:04
+Speaking of what you need, remember that curved city data that stumped your linear model?
+6:09
+It's time to go back and conquer it. In the lab, you'll add ReLU to your model,
+6:12
+and you'll finally capture those complex traffic patterns.
+6:15
+Let's put this knowledge to work.

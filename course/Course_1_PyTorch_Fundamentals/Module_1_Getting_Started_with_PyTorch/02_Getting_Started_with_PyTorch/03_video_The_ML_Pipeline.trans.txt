@@ -1,0 +1,288 @@
+0:00
+Last video, you saw how neural networks learn,
+0:03
+starting with our delivery time problem,
+0:05
+where a single neuron found
+0:07
+simple linear patterns in historical data.
+0:09
+Soon, in your first PyTorch lab,
+0:11
+you're going to train that model for yourself.
+0:13
+You'll also train on a whole new set of delivery data,
+0:16
+and then you'll use your model to make
+0:18
+predictions for new customer locations
+0:20
+that it has never seen before.
+0:22
+This process, using a trained model to make
+0:25
+predictions on unseen data, is called inference.
+0:28
+But before we jump into the code,
+0:30
+we also need to have a systematic approach.
+0:32
+Let me show you the framework that we're going
+0:34
+to use throughout this entire Professional Certificate.
+0:37
+Whether you're training this delivery predictor
+0:39
+or whether you're building image classifiers later on,
+0:41
+we're always going to reference
+0:43
+the same underlying structure. Here are the six stages.
+0:46
+Stage 1: Data ingestion.
+0:48
+It all starts with data.
+0:50
+Before you can train any model,
+0:52
+you need to gather your raw information and organize
+0:55
+it so PyTorch can work with each data point efficiently.
+0:58
+For the delivery predictor,
+0:59
+that data will come from the company's delivery records.
+1:02
+But here's where things get tricky.
+1:04
+Maybe earlier records listed
+1:06
+delivery times as free-text entries
+1:08
+like 22 minutes, while
+1:10
+newer ones use numeric values like 22.0.
+1:13
+There's always issues with things like missing values,
+1:15
+negative delivery times, or records that
+1:18
+suggested that you were biking at 200 miles an hour.
+1:20
+This kind of messy data is the norm.
+1:23
+Not the exception. In your first lab,
+1:25
+we're going to keep things simple.
+1:26
+You'll start with clean
+1:28
+delivery data that's ready to use.
+1:29
+But understanding these steps now helps you
+1:32
+appreciate what goes into real-world projects,
+1:34
+and you'll take on more of these challenges yourself
+1:37
+as we move forward in
+1:38
+the later courses of this certificate.
+1:40
+That brings us to Stage 2: Data preparation.
+1:43
+Getting that data was just the beginning.
+1:45
+Whether you're working with delivery records,
+1:47
+customer images or email text,
+1:49
+the next challenge is the same.
+1:51
+You have to clean, transform, and organize
+1:54
+that data into a form
+1:55
+that your model can actually learn from.
+1:57
+For the delivery data,
+1:58
+that might mean things like
+1:59
+fixing the errors we spoke about earlier,
+2:01
+like removing impossible delivery
+2:03
+times, or duplicate entries.
+2:05
+It could also mean handling
+2:06
+missing values when timestamps weren't recorded, or
+2:09
+engineering new features by converting addresses like
+2:12
+123 Oak Street into distances like 8.2 miles.
+2:16
+This stage often takes
+2:17
+the most time and the most code in a real project.
+2:20
+That's normal. Most models
+2:22
+don't fail because the math was wrong.
+2:24
+They fail because the data was messy.
+2:26
+Stage 3: Model building.
+2:28
+Now that your data is cleaned and it's ready,
+2:31
+it's time to design the model
+2:32
+that's going to learn from it.
+2:34
+Now, whether you're predicting delivery times or
+2:36
+classifying images, or maybe analyzing text,
+2:39
+this step is about choosing
+2:40
+the right architecture for your problem.
+2:42
+Architecture means structure.
+2:44
+How many neurons are you going to use?
+2:45
+How are they connected? What types
+2:47
+of layers does the model need?
+2:48
+For your delivery predictor,
+2:50
+the architecture is as simple as it gets
+2:52
+one neuron that learns
+2:54
+the relationship between distance and delivery time.
+2:56
+In PyTorch, defining
+2:58
+that model's architecture takes
+3:00
+just a single line of code.
+3:01
+The beautiful thing about PyTorch is that
+3:03
+even this simple model will follow
+3:05
+the same patterns as much more complex
+3:07
+ones that you're going to be
+3:08
+tackling later in this course.
+3:09
+Having a good model design is just the blueprint.
+3:13
+Next, you actually have to
+3:14
+teach it to make those good predictions,
+3:16
+and that's Stage 4.
+3:17
+Training. Here's where your model starts learning.
+3:20
+You'll feed in examples like the delivery
+3:22
+was 8.2 miles and took 22 minutes.
+3:24
+Or this one was 12.5 miles and took 31 minutes,
+3:28
+and the model will gradually
+3:29
+start to figure out the pattern.
+3:31
+In the training stage, you'll learn how to
+3:33
+configure the key pieces that make this process work.
+3:36
+How do you measure prediction errors?
+3:38
+How do you guide the model to improve?
+3:40
+And how do you control how fast
+3:42
+it learns with training settings?
+3:44
+Then you'll run the training loop, where PyTorch does
+3:46
+the heavy lifting and your model learns from the data.
+3:49
+But even when training finishes
+3:51
+successfully, you're not done yet.
+3:52
+Now comes the real test.
+3:54
+Can your model make a good prediction on new unseen data?
+3:57
+That brings us to Stage 5: Evaluation and debugging.
+4:01
+To know if you have a really good model,
+4:03
+you need to see how well it performs on new data.
+4:05
+This is examples that it wasn't trained on.
+4:07
+To find out, you're going to use a test set,
+4:10
+and this is a portion of the delivery data
+4:12
+that you held back during training.
+4:14
+Maybe a model predicts 28 minutes for a 15 mile delivery,
+4:18
+but in reality, it took 32 minutes.
+4:20
+How often is your model close?
+4:21
+How often is it way off?
+4:23
+As you move through the course,
+4:24
+you'll learn how to detect deeper issues
+4:26
+and debug models when things go wrong.
+4:29
+But for now, the key question is simple.
+4:31
+Does your model work well enough for you to trust it?
+4:33
+Stage 6 is deployment,
+4:35
+and this is the final stage.
+4:36
+That's getting your model out into
+4:38
+the real world for people to use.
+4:39
+Let's do ourselves a little favor,
+4:41
+and we'll leave this one out of the pipeline for now.
+4:43
+We'll pop back in when the time comes.
+4:45
+Now that you've seen the full picture,
+4:47
+you're ready to dive right in.
+4:48
+And in the next video, you'll see
+4:50
+how even our simple delivery model
+4:52
+follows these exact stages in PyTorch code.
+4:55
+Then in the lab, you're going to run it
+4:56
+yourself and find out
+4:58
+whether you should make that delivery.

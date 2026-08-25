@@ -1,0 +1,202 @@
+0:00
+Welcome to Module 1 of PyTorch Fundamentals.
+0:02
+Over the next few videos, you're going to build your first models with PyTorch.
+0:06
+Now, I'm guessing you're here for a reason.
+0:08
+Maybe it's because PyTorch powers cutting-edge AI research.
+0:12
+Or maybe your employers are asking for it.
+0:14
+Or perhaps you've heard it's the easiest way to build deep learning models.
+0:18
+All great reasons.
+0:19
+But let me show you what really makes PyTorch special, using an example.
+0:23
+Now, let's say I want to add two numbers and see the result.
+0:26
+In PyTorch, here's the entire code.
+0:28
+Now, if you haven't seen tensors before, don't worry about it.
+0:31
+They're just PyTorch's way of storing numbers.
+0:33
+And I'll explain more about them soon.
+0:35
+For now, just notice how simple this is.
+0:38
+That's it.
+0:39
+It just looks and acts like regular Python.
+0:41
+And when you print the results, you'll see the actual value right here.
+0:45
+Now, you might be thinking, so what?
+0:47
+That just looks like normal code.
+0:48
+Exactly.
+0:49
+That's the point.
+0:51
+Today, deep learning can feel like writing regular Python.
+0:54
+But it wasn't always like this.
+0:55
+You see, machine learning works very differently from traditional programming.
+0:59
+To make that concrete, imagine you're building a recommendation system.
+1:02
+Now, this is code that suggests products to customers.
+1:05
+In traditional programming, you'd write rules.
+1:07
+If the customer buys a camera, let's recommend some lenses.
+1:11
+But what if it was a gift?
+1:12
+And what if your friend already had five lenses?
+1:15
+You might need thousands and thousands and thousands of rules for every single exception.
+1:20
+And you'd probably still miss something.
+1:22
+Now, this is where traditional programming can hit a wall.
+1:24
+In traditional programming, you would write these rules to transform inputs to outputs.
+1:29
+But in machine learning, you give the system examples of inputs and outputs,
+1:33
+and it will learn the rules for you.
+1:35
+Deep learning takes this further using neural networks.
+1:38
+Give them customer histories, and they'll learn what people tend to buy.
+1:42
+Show them cat photos, and they'll learn what makes a cat a cat.
+1:45
+But here's the catch.
+1:46
+And here's why early tools were so complicated.
+1:48
+To learn from thousands or perhaps even millions of examples,
+1:52
+neural networks have to do a massive amount of math.
+1:56
+Every single example that you show it, every cat photo, every purchase history,
+2:00
+requires so many calculations across the entire network.
+2:03
+And this can happen over and over and over,
+2:06
+building up to millions of calculations as the network slowly learns the patterns.
+2:10
+The early frameworks were so focused on handling all of that computational power
+2:16
+that even the simplest things could become absurdly complex.
+2:20
+Let's go back to wanting to add two numbers.
+2:22
+Brace yourself.
+2:23
+Do you want to see the result?
+2:25
+You couldn't just print it.
+2:26
+You get something cryptic like this.
+2:28
+But why did deep learning tools work this way?
+2:31
+Well, the early frameworks made a deliberate choice.
+2:34
+They used something called a static computational graph.
+2:37
+It's a bit like a factory assembly line.
+2:39
+You had to define every step ahead of time in order,
+2:42
+and then you compile it and start running data through it.
+2:44
+You made a mistake, you want to experiment,
+2:47
+you forgot one operation and you need to insert it after step two.
+2:50
+Well, you can't.
+2:51
+The assembly line is already built and running.
+2:53
+You have to stop everything, tear it down, redesign it, and rebuild it from scratch.
+2:58
+And that's not all.
+2:59
+You could not test individual parts.
+3:01
+You had to build the entire assembly line before you could run any of it.
+3:06
+You couldn't use normal Python if statements or loops.
+3:10
+Instead, you had to use special operators that were complex and unintuitive.
+3:13
+And your assembly line could only handle inputs of one fixed size.
+3:17
+Now imagine if Python functions only worked with lists,
+3:20
+for example, with exactly three items.
+3:22
+You couldn't even use normal Python debugging.
+3:25
+When something went wrong, the error messages pointed to internal system code
+3:29
+and not where you actually made the mistake.
+3:31
+People could be spending their time fighting their tools
+3:34
+rather than doing the actual work.
+3:36
+So PyTorch emerged from this frustration with one core principle.
+3:40
+Deep learning should feel like normal Python.
+3:43
+PyTorch introduced a new way to handle computation.
+3:46
+You just write clean Pythonic code and PyTorch takes care of the rest.
+3:51
+You can use your normal loops, your if statements.
+3:53
+You can change anything, anytime.
+3:54
+It all just works.
+3:55
+And when something breaks, the error will point to your code.
+3:58
+You can stop your program, inspect the variables, and fix problems
+4:02
+just like anything else that's Pythonic.
+4:04
+But PyTorch became more than just a tool.
+4:07
+Today, it's backed by a massive community.
+4:09
+Researchers sharing code that you can reuse,
+4:12
+solutions to common problems, and constant improvements.
+4:15
+There's an answer to almost any question that you might have.
+4:18
+In this mix, Python's simplicity, powerful tools, and a thriving community
+4:23
+is why PyTorch has become the go-to choice for everyone
+4:26
+from students to researchers at the cutting-edge of AI.
+4:29
+And now, you're ready to join them.
+4:31
+Whether you're exploring new ideas, growing your career,
+4:34
+or just getting more comfortable with the framework,
+4:36
+you're in the right place.
+4:37
+So let's get started.

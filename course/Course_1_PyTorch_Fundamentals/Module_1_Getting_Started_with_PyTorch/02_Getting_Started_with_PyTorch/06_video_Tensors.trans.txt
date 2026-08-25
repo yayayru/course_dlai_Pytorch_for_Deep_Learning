@@ -1,0 +1,256 @@
+0:00
+In the last lab, you trained a model to predict delivery times.
+0:03
+And along the way, you've been using tensors,
+0:06
+maybe without thinking too much about them.
+0:07
+And that's fine until it isn't.
+0:09
+Many PyTorch errors come from tensor issues.
+0:12
+So let's build up your tensor skills now
+0:14
+before those errors might derail your projects.
+0:16
+In this video, you'll learn how to read and understand
+0:19
+tensor shapes, handle data types in PyTorch,
+0:22
+create tensors in different ways,
+0:24
+reshape and slice them to fit your models,
+0:26
+and then pull out what you need.
+0:28
+So let's start with the most important tool
+0:30
+in your tensor toolkit, checking shapes.
+0:33
+When you print distances.shape, you'll
+0:35
+get something like torch.Size([6, 1]).
+0:38
+And that will tell you exactly how your data is organized.
+0:42
+There are six samples.
+0:43
+That's your batch size.
+0:44
+And there's one feature per sample.
+0:46
+That's the distance of each delivery.
+0:47
+Shape mismatches are one of the most common PyTorch errors,
+0:51
+right alongside device and dtype issues.
+0:54
+So let's take a look at a shape that does work
+0:56
+and will be using the same single neuron model
+0:58
+that you trained earlier.
+0:59
+Now pass in the distances, and it just works.
+1:02
+Well, why?
+1:03
+Because each sample has one feature,
+1:05
+just as the model expects.
+1:07
+But what about that 6?
+1:08
+Why doesn't the batch size cause a problem?
+1:10
+Well, that's because the model expects the first dimension
+1:14
+to be the batch size.
+1:15
+And that's the number of samples it will take at once.
+1:18
+Think of it a little bit like a stack of papers.
+1:20
+The model reads each page the same way,
+1:22
+whether there are six pages or 600 in the stack.
+1:25
+The first dimension is how many,
+1:27
+and the rest describe what each sample looks like.
+1:30
+So now try passing in multiple features
+1:32
+like distance, hour, and weather.
+1:35
+It fails.
+1:36
+The model was only built for one input feature.
+1:39
+So when you hit a shape mismatch,
+1:41
+PyTorch will tell you what's wrong, but not how to fix it.
+1:44
+Once you see both shapes, usually the fix will be obvious.
+1:47
+Now you understand shapes, let's talk about data types.
+1:50
+When you create a tensor, PyTorch can use defaults.
+1:54
+You wanna enter integers, you'll get int64.
+1:57
+Include a decimal point, then you'll get float32.
+1:59
+And if you want to be explicit,
+2:01
+you can use the dtype argument.
+2:03
+It guarantees float32 even if you forget the decimal point.
+2:07
+Alternatively, you can use .float()
+2:10
+to convert any tensor to float32.
+2:12
+But what happens if you mix types?
+2:14
+It used to be the case that PyTorch would throw an error
+2:17
+when you try to mix dtypes.
+2:18
+That's no longer true.
+2:20
+Now PyTorch will automatically handle mixed types
+2:23
+through type promotion.
+2:25
+For an example, if you add an int tensor
+2:27
+and a float tensor, PyTorch will automatically convert
+2:30
+the int to float and then return a float result,
+2:33
+just like regular Python.
+2:35
+There are other types too, like float64 for extra precision
+2:38
+or int8 for memory savings.
+2:40
+But for neural networks, float32 is the sweet spot.
+2:44
+It's fast, accurate, and standard on modern hardware.
+2:47
+Now that you understand types,
+2:48
+let's look at a different way to create tensors.
+2:52
+The simplest way, use Python lists.
+2:54
+And if you're coming from NumPy,
+2:56
+PyTorch tensors behave almost exactly the same way.
+2:59
+You can convert a NumPy array like this.
+3:01
+Just remember, this shares memory.
+3:03
+If you change one, then the other changes too.
+3:05
+If you need quick test data,
+3:07
+try these built-in patterns for zeros, ones, or random.
+3:10
+Once you have tensors, you'll often need to reshape them
+3:13
+to match what your model expects.
+3:15
+Remember, PyTorch models expect input
+3:17
+with a batch dimension, like [6, 1] that we saw earlier.
+3:20
+That first number six tells the model
+3:22
+how many samples it's getting.
+3:24
+One of the most common shape errors, of course,
+3:26
+is forgetting that batch dimension.
+3:28
+Let's say you want to predict the delivery time
+3:30
+for a single order, for example, 25 miles.
+3:33
+This is a scalar, but your model expects a shape
+3:35
+of batch size, features, which at a minimum is [1, 1].
+3:39
+You can also use unsqueeze() to add dimensions.
+3:43
+So now it's ready for the model.
+3:44
+So always check the shape before you use unsqueeze().
+3:47
+And if you're going the other way, try just using squeeze().
+3:51
+squeeze() removes all dimensions of size one,
+3:52
+and it's great for cleaning up after batching.
+3:54
+And always print tensor.shape when you're debugging.
+3:58
+These tools are your first defense against shape errors.
+4:00
+Now, sometimes you need specific values from your tensors,
+4:03
+like checking predictions or grabbing a few samples.
+4:07
+Indexing and slicing can be used for this,
+4:09
+and they work just like Python lists.
+4:11
+This gives the first prediction,
+4:12
+and this gives the first three.
+4:14
+But even a single index value is still a tensor.
+4:18
+So if you want the actual Python value,
+4:20
+use .item() to convert it into a float.
+4:23
+But be careful, .item() only works on tensors
+4:26
+with exactly one element.
+4:28
+Call it on a bigger tensor, you'll get an error.
+4:31
+So far, we've looked at one feature per sample.
+4:33
+With multiple features,
+4:35
+you can index across both dimensions like so.
+4:38
+You've now seen shapes, types, reshaping, and indexing.
+4:42
+It's a lot, but don't worry,
+4:43
+you don't need to memorize everything.
+4:44
+These patterns will become second nature with practice,
+4:47
+and even the pros check the docs.
+4:49
+In the next video,
+4:50
+you'll learn how PyTorch handles element-wise operations
+4:54
+and broadcasting.
+4:55
+These are powerful tools for building models
+4:57
+and transforming data.
+4:58
+In the upcoming lab, you'll debug real tensor errors
+5:01
+using the tools that you've just learned.
+5:03
+I'll see you there.
