@@ -1,4 +1,117 @@
-yTorch error.
+0:00
+Welcome back. You've learned how to train a convolutional neural network,
+0:03
+layer by layer, with a solid data pipeline and tools to boost performance.
+0:07
+Now it's time for one last skill, inspecting what's inside your model.
+0:11
+In this video, you'll explore tools to examine your model's structure,
+0:15
+count its parameters, and understand how layers are wired together.
+0:18
+You'll also see how this helps you solve real issues, like those pesky shape mismatch errors.
+0:23
+Let's start with a simple question. How do you see what's inside your model?
+0:28
+Your first instinct might be to print it, and you'll get something like this.
+0:31
+Each line shows you the name that you gave the layer, like conv1 or fc2,
+0:36
+the type of layer, such as conv2d, maxpool2d, or dropout,
+0:40
+and key settings like input output sizes or kernel size.
+0:44
+This mirrors exactly what you defined in init.
+0:47
+It's like PyTorch is showing you a blueprint, perfect for spotting those structural mistakes.
+0:52
+But notice what's missing. How many parameters does each layer have?
+0:55
+What shapes are the tensors? What's actually inside those sequential blocks?
+0:59
+In this video, you'll learn how to dig deeper. You'll see exactly what's inside your model,
+1:04
+understand how big it is, and pick up debugging tricks that can save you hours.
+1:09
+We'll also look at how inspection helps when something breaks,
+1:13
+like a shape mismatch or a device error.
+1:15
+So let's start with that first question. How many parameters does your model have?
+1:19
+To count parameters, you might try...
+1:21
+But instead of a list, you'll get something like this.
+1:23
+That's a generator. Can you think of a reason why PyTorch might use generators here?
+1:29
+Because it's efficient. It doesn't load everything into memory.
+1:33
+It just gives you one parameter at a time when they're needed.
+1:36
+To actually see the parameters, you'll need to iterate. And you'll get shapes like this.
+1:41
+Each shape represents a set of parameters, usually weights and biases from your layers.
+1:46
+But if you want the total number of parameters, here's the standard approach.
+1:50
+The .numL method gives you the number of elements in each tensor.
+1:54
+Add them all up and you've got your total parameter count.
+1:58
+Over a million parameters? Well, great. But where exactly are they?
+2:01
+To find out, you need to look at each layer individually.
+2:05
+And that's where .namedParameters comes in.
+2:07
+This shows you exactly where each set of weights and biases live, layer by layer.
+2:12
+To understand these shapes, let's take a look at FC1.weights as an example.
+2:17
+It connects 2048 inputs to 512 outputs.
+2:22
+So you get a weight matrix with a shape 512 by 2048.
+2:26
+Each row holds the weights for one output neuron. One weight for every input.
+2:31
+Now that might feel backwards if you're expecting it in the order of input-output.
+2:35
+But the shape reflects the purpose. Each output combines information from all inputs.
+2:41
+So PyTorch organizes the weights around the outputs.
+2:45
+And the bias? Well, that's the 512. There's one value per output neuron.
+2:50
+But what if your model includes nested blocks like sequential or custom modules?
+2:54
+How do you peek inside them?
+2:56
+Well, PyTorch gives you two handy methods. Children and modules.
+3:00
+Let's start with children. This shows only the top-level components,
+3:04
+like your convolutional or your fully connected layers.
+3:06
+If a block contains other layers, like sequential or a custom module,
+3:10
+you won't see what's inside. To go deeper, try modules.
+3:14
+What's the difference? Think of your model like a folder structure.
+3:18
+Children shows only the top-level folders. Modules shows everything inside,
+3:23
+including layers nested inside sequential or other custom blocks.
+3:27
+This is especially helpful when you're working with modular architectures
+3:31
+and you want to inspect every layer.
+3:34
+Now you've got the full picture of your model.
+3:36
+But what happens when something goes wrong?
+3:37
+Well, let's take a look at a common PyTorch error.
 3:40
 This one usually means the input to a linear layer did not match what the layer expected.
 3:45
