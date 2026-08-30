@@ -1,0 +1,130 @@
+0:00
+Welcome to module three.
+0:01
+In the last two modules, you've gone from PyTorch fundamentals to building your first
+0:05
+image classifier. You can load data, build neural networks,
+0:08
+train them and get real predictions.
+0:10
+That foundation is exactly what everything else builds on.
+0:14
+But now things get more interesting.
+0:16
+So far, you've worked with clean, well-organized data sets like MNIST.
+0:20
+But we're going to be diving deeper into
+0:22
+the data side of the pipeline now, because in practice,
+0:25
+data sets are often much messier and more challenging.
+0:28
+And that's exactly the kind of problem you're about to take on.
+0:31
+A botanical garden wants to build a flower
+0:34
+identification app for its visitors, and you've been brought in to help.
+0:38
+Three different teams have already tried.
+0:39
+They all used exactly the same neural network architecture,
+0:42
+identical layers, the same parameters, but they got wildly different results.
+0:47
+Why? Because the real challenge isn't just the model.
+0:51
+It's also the data.
+0:52
+It doesn't matter how sophisticated your
+0:54
+model is, if you can't properly access and prepare your data,
+0:59
+you're doomed from the start.
+1:00
+Bad data handling means bad results.
+1:03
+And that's exactly what sank those teams.
+1:05
+Now you're taking on the project and I
+1:07
+want to make sure that you don't make the same mistakes, because even the best model
+1:11
+in the world can't save you from a broken data pipeline.
+1:14
+So let's see what you're going to be working with.
+1:16
+The botanical garden provided the Oxford 102 flowers data set for training.
+1:21
+And here's what you get when you download
+1:23
+and unzip it, a folder full of images.
+1:25
+And when you open the folder,
+1:27
+they're generically named JPEG files like image 0001.
+1:31
+And when you open a file, you can see the images inside it are flowers.
+1:35
+In many data sets, images are neatly sorted
+1:38
+into folders named after their categories, but that's not the case here.
+1:42
+Instead, labels are stored separately in a .mat file, which is a compressed
+1:47
+binary format from MATLAB, and you'll need to figure out how
+1:50
+to extract your labels from this potentially unfamiliar file type.
+1:54
+So that's a first glimpse at your data.
+1:56
+And remember, the only difference between
+1:58
+those failed attempts was how each team handled this data set.
+2:02
+It made all the difference between a successful app and a frustrating failure.
+2:07
+So what does handling the data actually mean?
+2:10
+Well, when you're working with any data
+2:12
+set, there's a natural progression and potential problems at every step.
+2:16
+First, you need to access the files and match the images to their labels.
+2:20
+With Oxford Flowers, that's already tricky.
+2:23
+The images have generic names and the labels are tucked away in .mat files.
+2:28
+That's not the most beginner friendly approach.
+2:30
+Next, you need to get the images into the right format, correct size,
+2:33
+data type and structure so your model can actually learn from them.
+2:37
+And then finally, you need to load everything efficiently in batches,
+2:40
+not one image at a time or your training could grind to a really slow halt.
+2:44
+Problems can crop up at any of these steps and they're not always obvious.
+2:49
+So in this module, we'll group these issues into three
+2:52
+categories, access problems, quality problems and efficiency problems.
+2:57
+And when things went wrong for those
+2:58
+earlier teams, it could have been any one of those.
+3:01
+In this module, we're going to work through each of these problem areas
+3:05
+systematically using that Oxford Flowers data set.
+3:08
+Your main tools will be PyTorch's data set and data loader classes.
+3:12
+You've seen them before,
+3:13
+but now we're going to dive deeper into what they can really do for you.
+3:16
+By the end of this module, you'll have the data pipeline skills
+3:20
+to build the botanical garden app and tackle any projects that comes your way.

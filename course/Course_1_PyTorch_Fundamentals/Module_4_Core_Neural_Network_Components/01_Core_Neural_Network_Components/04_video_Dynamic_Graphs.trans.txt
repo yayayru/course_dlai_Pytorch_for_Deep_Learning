@@ -1,0 +1,132 @@
+0:00
+Welcome back! You've just trained your first convolutional neural network for the Botanical
+0:03
+Garden app. But let's take a closer look. The structure is completely linear. Data flows
+0:08
+straight through. There's three blocks of convolution, ReLU, and pooling layers,
+0:12
+and then it's flattened and passed through a few more layers before outputting a prediction.
+0:16
+Now that's a solid start. But so far, it's just a stack of layers. It looks repetitive,
+0:21
+and it doesn't really show off what makes PyTorch special. In PyTorch, you're not locked
+0:25
+into that rigid model structure. And it accomplishes this using something called
+0:29
+a dynamic computation graph that gets built as your model runs, step by step.
+0:34
+As you heard way back in Module 1, older frameworks worked differently. You had to
+0:39
+define your computation graphs ahead of time, before any data could pass through.
+0:43
+But what does that actually mean? What is a computation graph? What makes PyTorch's
+0:47
+dynamic approach so powerful? Well, let's take a closer look. Let's start with a model defined
+0:51
+using sequential. The model runs your data through each layer in order, just like you'd
+0:56
+expect. Each layer transforms the input and passes it on. It's simple, readable, and effective for
+1:02
+straightforward architectures. But here's the catch. Sequential locks you into a fixed structure.
+1:08
+It doesn't support loops, conditionals, or other kinds of branching logic. In fact, this kind of
+1:13
+code isn't so different from how you'd build models in older frameworks using static graphs.
+1:18
+To see why, let's take a closer look at what a computation graph really is.
+1:23
+When you write this sequential block, you're defining a specific mathematical equation.
+1:28
+Conv2D might specify thousands of multiplications and additions.
+1:32
+ReLU zeroes out any negative values. And when chained together, you get one giant equation.
+1:37
+Now, imagine spelling out that very equation every single calculation, one step at a time.
+1:43
+Multiply this by that, add the result to this, zero out negatives, multiply again,
+1:47
+add the bias, on and on and on countless times. That step-by-step breakdown? That's a computation
+1:54
+graph. Every operation you apply is recorded as part of that graph. Why? Because during training,
+2:00
+all deep learning frameworks need to walk backwards through the graph using the chain
+2:04
+rule from calculus. That's how it figures out how to adjust each and every parameter.
+2:09
+And older frameworks handled this differently than PyTorch does now. You had to define that
+2:13
+entire graph up front, every operation, every connection, before anything could run. Once
+2:19
+defined, the structure was locked. And when you use sequential in PyTorch, you're working with
+2:23
+similar constraints. Everything runs in a fixed order. You can't print intermediate values to
+2:28
+debug. There's no conditionals. There's no loops. Every input follows the same path with no
+2:33
+exceptions. And that's why sequential feels a little bit like static graph programming. You're
+2:38
+back to defining that fixed equation with no flexibility. Now, you might wonder, why would
+2:43
+anybody want to work that way? Well, it turns out there are real benefits when a framework knows the
+2:48
+full computation graph in advance. It can optimize it for speed and memory efficiency. But the
+2:53
+trade-off, you give up flexibility because you're describing a fixed equation. There's no room to
+2:58
+tweak things as you go or explore unexpected ideas. And that's exactly what PyTorch set out to change.
+3:04
+Let's look at an example. Imagine you're building a CNN for your botanical garden app, but now you
+3:09
+want it to handle flowers differently from butterflies. In PyTorch, you can write that
+3:14
+logic directly inside the forward method. In older frameworks with static graphs, that kind of control
+3:19
+was really, really difficult. Yes, they allowed you to have the conditionals, but only by building
+3:25
+every possible path ahead of time. PyTorch takes a different approach. That if statement doesn't
+3:30
+just control the logic, it shapes the graph itself. Each time forward runs, PyTorch records
+3:37
+exactly what happens. Every multiplication, addition, layer, and branch. The result is a
+3:42
+custom computation graph built on the fly, based on the actual path that your data takes. That graph
+3:49
+is used for backpropagation, so the parameters get updated, and then the graph is discarded.
+3:54
+Next time forward runs, PyTorch starts from scratch, building a brand new graph tailored for
+3:59
+that run, even if it follows a completely different path. And that's the core difference. Static
+4:05
+frameworks make you think like a compiler, but PyTorch lets you think like a Python programmer.
+4:10
+Write logic, branch, adapt on the fly. This flexibility comes from using nnModule instead of
+4:16
+nnSequential, where the init defines our model, and forward allows us to define the flow of your
+4:21
+dynamic graph. Now, these dynamic graphs do come with a small performance trade-off, but for
+4:26
+researchers and developers, that flexibility means faster iteration, easier debugging,
+4:31
+and more expressive models. And it's not just a nice idea, it solves real problems that you will
+4:36
+actually run into. For example, static graphs often require all inputs to be the same shape.
+4:41
+But what if you're working with sentences, where some have 3 words and some really long ones have
+4:45
+50? In PyTorch, it just works. If you need to debug something in the middle of a computation,
+4:51
+in static frameworks, that meant switching to a special debug mode,
+4:54
+interrupting the flow wasn't allowed. In PyTorch, it's just Python. If you need to investigate an
+5:00
+issue, just add a print. You can even build models that adapt to the input, like running a simpler
+5:04
+model for simple cases, and a complex model for trickier cases. Your model becomes smart about
+5:10
+its own computation. And these are not edge cases, this is how modern AI works. In PyTorch,
+5:17
+it's all possible by just writing Python code. This kind of flexibility is perfect for experimentation,
+5:23
+but as your models grow, you'll need better ways to structure your code.
+5:27
+And that's what we'll explore next. And I'll see you in the next video.

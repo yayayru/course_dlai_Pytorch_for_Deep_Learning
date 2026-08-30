@@ -1,0 +1,144 @@
+0:00
+Welcome back. You've built a working Oxford Flowers pipeline, but how robust is it? What
+0:04
+if your dataset contains corrupted images? Or what if your model has to recognize flowers in
+0:09
+different or poor lighting? And how can you be sure that your pipeline even works before you
+0:14
+start training for hours? In this video, you'll learn the techniques to make your pipeline more
+0:18
+reliable and your model more robust. You'll add data augmentation to handle real-world variations,
+0:24
+run a single batch test to catch errors early, and add error handling so that one bad image
+0:29
+doesn't crash your entire training run. Let's start with data augmentation. So far, your model
+0:35
+has only seen the original Oxford Flowers images, and they're all taken in similar conditions. To
+0:41
+help it recognize flowers in more varied situations, you can use data augmentation
+0:47
+to generate new versions of those images. But why does that help? Well, if your model only
+0:53
+sees perfect, centered roses in bright sunlight, it might fail when someone shows it an image
+0:59
+that's off-centered and in the shade. By showing the same flower from different angles, in different
+1:05
+lighting, and with subtle changes, you're teaching the model to focus on the essential features,
+1:10
+like the shape and the color, rather than superficial details or the placement of the
+1:15
+flower in the image itself. One way to do this is by saving flipped, rotated, or brightness-adjusted
+1:22
+copies as new files. But PyTorch has a smarter solution, on-the-fly augmentation. Instead of
+1:29
+storing extra files, PyTorch applies random transformations every time an image is loaded.
+1:35
+So, for example, in Epoch 1, flower 42 might be flipped horizontally, and then in Epoch 2,
+1:41
+it might be rotated slightly and darkened. This gives your model endless variation of training
+1:46
+data without taking up extra storage. To make this work, we'll define separate transforms for
+1:52
+training and validation. This transform applied during training includes random changes, as you
+1:58
+can see in this code. Here, you might add a horizontal flip, a rotation, or perhaps a color
+2:03
+jitter, which randomly will mess with the lighting and color of an image. You can also learn more
+2:08
+about all of the other augmentations in the course resources. Now, you can see here in validation,
+2:13
+I removed those augmentations. But why would you skip augmentation for validation? Well, that's
+2:19
+because you want to evaluate your model on consistent data. If validation images change
+2:23
+randomly too, you couldn't tell whether performance changes were real due to real model improvements,
+2:30
+or just because of the different inputs. So, now that you've added augmentation to make your model
+2:35
+more robust, let's make your pipeline more robust too. Here's a frustrating scenario. Your training
+2:40
+has been running smoothly, and then two hours in, crash. One corrupted image brings everything down,
+2:46
+or maybe an image is technically valid, but so small that it breaks your transforms. These issues
+2:52
+are more common than you might think, especially with real-world datasets. The Oxford flowers
+2:57
+dataset is relatively clean, but what if a file was only partially downloaded and corrupted,
+3:02
+or maybe somebody accidentally saved a broken image? Let's build a dataset that handles these
+3:08
+problems gracefully. The first step is simple. Instead of crashing, we track errors. Then comes
+3:13
+the important part, making get item resilient to bad data. It starts out as usual, but now we can
+3:20
+add a few safety checks. Verify confirms that the file is not corrupted. A size check skips tiny
+3:26
+images that might break your transforms. Convert RGB fixes grayscale images that might have snuck
+3:31
+in. But here's the key. What happens when something still goes wrong? Well, instead of crashing,
+3:37
+we can log exactly what went wrong, we can print a warning, and then we can gracefully skip to the
+3:43
+next image. That recursive call to get item will keep your pipeline moving, even when files are
+3:48
+broken. Finally, we'll add a method to review the issues after training. So now when training
+3:54
+completes, you can expect which images had problems, and then decide whether you want to fix them or
+3:59
+leave them out. With error handling in place, your pipeline will not crash on bad data, and you will
+4:05
+have a clear record of what went wrong. But there's another subtle issue that can hurt your model's
+4:10
+performance, and that's overly aggressive augmentation. I've seen pipelines where the augmentations were
+4:15
+so extreme that the flowers turned into unrecognizable blobs of color. And if your model can't
+4:20
+tell what it's looking at, well it can't learn the features and then can't learn to classify. So how
+4:25
+do you know if your augmentation is reasonable? Well, one simple thing is just look at it. We can
+4:30
+build a quick visualization tool. So every time you call data set IDX, the random augmentation
+4:36
+will create a new variation. We can use that to show eight different versions of the same flower.
+4:42
+But there's a catch. The images are normalized, so we need to undo that before we display them.
+4:47
+This code reverses normalize, so you can actually see the colors instead of the distorted values.
+4:54
+Now you can test your augmentation, and here's what to look for. If the flower is clearly recognizable
+4:59
+in each version, then you're in good shape. If they all look identical, then your augmentation
+5:04
+probably isn't working. If they look like abstract art, it's probably too aggressive. And if the
+5:08
+images are all black or have wild colors, it could be a normalization issue. So you've handled errors
+5:14
+gracefully and verified the augmentations look reasonable. But here's a key question. How do you
+5:19
+know your pipeline is actually working during training? You might have images that are never
+5:25
+accessed because of a shuffling bug. Or maybe some images might be loaded far more often than
+5:30
+others. Without monitoring, you would never know. So let's add some lightweight tracking to shine a
+5:35
+light on what's happening under the hood. This will extend your data set to track which images get
+5:40
+loaded, how often each one is accessed, how long each load takes, and then we'll add a simple method
+5:47
+to review all of these stats and call it just after each training epoch. And this kind of monitoring
+5:52
+can reveal shuffling bugs where some images are never accessed, performance issues such as slow
+5:57
+load times, data imbalance where certain images are accessed too often. It's good for you to catch
+6:03
+these problems early and it's better to do it now than discover after days of training. And that's
+6:09
+it. You've transformed your Oxford Flowers pipeline from a basic loader into a production ready system.
+6:15
+If you want to see all of these pieces in action, check out the lab for this module where you'll
+6:20
+build and explore the complete pipeline, putting your data through real world tests before training
+6:26
+even begins. You've prepared the data, now it's time to go build something amazing with it.
+6:30
+Congratulations on mastering PyTorch's data pipeline and we'll see you in the next module.

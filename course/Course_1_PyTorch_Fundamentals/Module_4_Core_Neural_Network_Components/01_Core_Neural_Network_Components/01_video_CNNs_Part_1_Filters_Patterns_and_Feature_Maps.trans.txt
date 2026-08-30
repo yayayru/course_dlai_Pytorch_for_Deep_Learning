@@ -1,0 +1,134 @@
+0:00
+Welcome back. You've done a great job handling the data for your botanical garden app,
+0:04
+but I got some news for you. The butterfly house next door wants in, and they want us to expand
+0:08
+the app so that visitors can also classify insects and small animals. So you're going
+0:13
+to need something bigger. You're going to need something that can recognize more advanced things
+0:18
+and can detect edges, textures, and patterns, and you're going to need something called a
+0:22
+convolutional neural network. You built your classifiers using linear layers, but here's
+0:27
+the problem. Linear layers treat every pixel as independent. When your model looks at a flower
+0:33
+or a butterfly image, it sees thousands of separate numbers with no understanding that
+0:39
+neighboring pixels can form features like wings, antennae, or eye spots. And that's where
+0:44
+convolutional neural networks come in. Over the next two videos, you're going to explore how
+0:49
+convolutional layers help neural networks see by scanning for patterns and images using filters.
+0:56
+CNNs are the backbone of computer vision and they're inspired by biology. In the 1960s,
+1:02
+neuroscientists found that certain neurons in the visual cortex respond only when they see
+1:08
+particular patterns. CNNs mimic this by using filters to sort out features and images and learn
+1:15
+from those. So let's see how this works with one of our nature photos. Here's a close-up from our
+1:20
+data set in grayscale. If I zoom in, you can see the individual pixels. Now let's add the grayscale
+1:27
+values. You've centered on this pixel with a value of 61. Now think of the surrounding pixels in this
+1:32
+3x3 grid as its neighbors. Now imagine a filter, a separate 3x3 grid of numbers which you'll slide
+1:40
+over this image. At each position, you'll multiply the filter values with the pixel values underneath.
+1:46
+Then you're going to add all of these together, essentially changing its color.
+1:50
+Then when you slide the filter over the image and calculate new values for each pixel based on its
+1:55
+neighbors, that process is called a convolution. Well, why on earth would you do this? Well, by assigning
+2:02
+different weights in the filter, you actually highlight different kinds of patterns. Now let's
+2:07
+take a look at what that means. Take this image for example. Can you guess what this filter might do?
+2:11
+You could think of it like these values in the center as starting from a baseline of zero or
+2:17
+black. But if you look to the left and right, adjacent pixel values that are similar will
+2:22
+actually cancel each other out. But if there's a sharp contrast, say the left side is really dark
+2:27
+and the right side is really bright, that creates a strong output for this filter. That's exactly
+2:33
+what you'd expect for a vertical edge in an image. The filter picks up on this contrast and highlights
+2:39
+where the vertical edges appear. Now what do you think this filter might do? Well, it's very similar
+2:45
+to the previous one but this one detects horizontal edges and here is what it produces. Now why does
+2:51
+this matter for a classification task? Well, when you identify a butterfly, you don't analyze every
+2:56
+pixel. You notice wing shapes, vein patterns, those distinctive orange and black sections. Your brain
+3:03
+uses these features to recognize that's a monarch. For our model, it's the same idea. Filters help
+3:11
+highlight the patterns that distinguish the difference between a monarch and a swallowtail
+3:15
+or between a butterfly and a beetle. Now here's the interesting part. You could design those filters
+3:21
+by hand but how would you know which filters work best for butterflies versus flowers versus beetles?
+3:28
+Or what if the model could learn which filters work best and tune them to find specific patterns
+3:35
+that identify each class? That's the key power of convolutional neural networks. They will figure
+3:41
+out which visual features matter most for the specific task that you have in mind. Pretty cool,
+3:46
+right? So now let's dive in and see how you can create convolutional layers in PyTorch using
+3:52
+nn.module. Earlier you built networks using layers like nn.linear. A convolutional layer
+3:59
+works in exactly the same way. It's just another type of layer that you add to your model architecture.
+4:03
+In PyTorch, you define one using nn.conv2d. Now that name just means it's a two-dimensional
+4:10
+convolution like you would use in a two-dimensional image. So let's walk through each of these settings
+4:15
+step by step. In channels is the number of color channels in your input image. For our nature
+4:21
+photos, that's typically three channels red, green, and blue. Out channels determines how many filters
+4:27
+your convolutional layer will use. Each filter learns to detect a different feature. Maybe one
+4:32
+will find wing edges, another spots eye patterns, and another detects fuzzy textures. Usually you'll
+4:38
+have multiple filters to capture all of the different features in your images. Kernel size
+4:44
+sets the size of each filter and a three by three filter is common because it examines each pixel
+4:50
+along with its immediate neighbors and this is perfect for detecting local patterns like wing
+4:55
+scales or flower petal textures. Stride controls how far your filter moves with each step as it scans
+5:02
+the image. A stride of one means it carefully checks every pixel. Increasing the stride makes
+5:07
+the filter skip pixels. It's faster but you're potentially missing fine details like antenna
+5:13
+segments. Padding is really interesting and it's related to the kernel size. Think about this for a
+5:19
+second. How would you center a pixel on the edge of an image? Well imagine you zoom into this corner
+5:25
+of an image so that the boundary is now outside the image and now take a filter and slide it into
+5:31
+the corner. But what happens if you want to center the filter on the pixel in the corner? Your filter
+5:37
+now has neighboring values that fall outside the image. A padding value of one simply adds those
+5:43
+values in and they're typically set to zero by default. This is related to kernel size because
+5:49
+what if I had a kernel size of five? Now you're going to see you need a padding size of two
+5:54
+in order to center on a corner pixel. So that covers how filters work and how convolutional
+6:00
+layers use them to find useful patterns and images. Now that could be the delicate veins
+6:05
+of a butterfly wing or the spiral pattern of flower petals. In the next video you'll explore
+6:11
+the architecture of a complete convolutional neural network and you'll understand how convolutional
+6:17
+layers, pooling and fully connected layers all work together and then we'll implement that in PyTorch.

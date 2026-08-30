@@ -1,0 +1,130 @@
+0:00
+In the last video, you explored how convolutional layers work and how CNNs can learn useful filters to extract features and patterns from images.
+0:09
+Now we're going to put those pieces together into a full convolutional neural network architecture.
+0:14
+And as you can see, it extends nn.module just like you've done before.
+0:18
+In the init() function, you'll define the structure of your network.
+0:22
+It starts with two convolutional layers and ends with a fully connected layer to classify your images.
+0:27
+Fully connected just means that every neuron in the input is connected to every neuron in the output,
+0:32
+and it's just another name for linear layer.
+0:35
+In this first convolutional layer, you're going to start with an image that has one channel, so it's a grayscale image.
+0:41
+Each pixel has a single brightness value.
+0:43
+The model will then try to learn 32 different filters.
+0:47
+Each filter is one of these 3x3 grids of numbers, so there's 9 weights per filter.
+0:52
+These filters slide over the image and respond to different patterns with a padding of 1.
+0:58
+While the output of this layer may look like 32 new images,
+1:02
+they're really just arrays of numerical values showing how strongly each filter reacted to different parts of the image.
+1:10
+These are commonly known as feature maps or activation maps, and they map where each feature appears in the input.
+1:17
+Then comes the ReLU activation.
+1:19
+And as you know, it sets any negative numbers in the resulting feature map to zero.
+1:23
+And again, this helps the model learn more complex patterns.
+1:27
+Then it's fed into something called MaxPool2D.
+1:30
+What is that?
+1:31
+Well, let's take a look.
+1:33
+Pooling is a common technique in convolutional neural networks that's used to reduce the size of feature maps.
+1:40
+It's effectively a way to throw away pixels after a filter has been applied,
+1:44
+compressing the data while keeping the most important parts in a way that shouldn't affect the results.
+1:50
+Let's see this in action.
+1:51
+Say you had a kernel size of 2 for the MaxPool.
+1:54
+So on the left, you have a feature map output from a filter.
+1:58
+Since you're pooling kernel sizes 2, you select a 2x2 area of values.
+2:03
+You'll then only keep the largest value in this group, in this case it's 192, and discard the rest.
+2:09
+That's why it's called MaxPooling.
+2:12
+If you repeat this process across every 2x2 group of values in the feature map,
+2:17
+you'll end up with a smaller output, keeping only the maximum value from each 2x2 area.
+2:23
+The logic here is that your filters have already extracted the important features from the original image.
+2:29
+So now, by applying pooling, you're compressing each filtered image, keeping just the most significant information.
+2:37
+As a result, less data needs to pass through the network,
+2:40
+and the next layer sees images that were only a quarter of the original size.
+2:45
+And this is important because after your first convolutional layer,
+2:49
+you now have 32 different feature maps flowing into the second layer.
+2:53
+For large images, this quickly becomes a lot of data.
+2:57
+Pooling reduces this volume of information, making your neural network much more efficient
+3:02
+without losing valuable details, and more robust to small changes.
+3:08
+After your convolutional and pooling layers have highlighted and compressed the key features in the image,
+3:14
+it's now time to classify the result using a fully connected layer.
+3:18
+This fully connected layer combines all of the features into a final prediction.
+3:23
+In this example, you can see that the linear layer has 64 x 7 x 7 inputs.
+3:29
+The 64 should be relatively clear as the second convolutional layer has 64 outputs from its 64 filters.
+3:37
+But why 7 x 7?
+3:38
+Here's a hint.
+3:39
+If our nature photos were resized to 28 x 28 pixels for this example, can you figure it all out?
+3:45
+Well, remember how the max pooling layer works by taking images from 2 x 2 chunks.
+3:50
+So a 28 x 28 image is going to be split in half on each axis, and you'll have 14 x 14 images.
+3:56
+The second max pooling layer is going to do the same thing and halve that 14 x 14 to get you to 7 x 7.
+4:03
+So then those 7 x 7 feature maps will get fed into the final linear layer.
+4:08
+So in other words, each max pooling layer halves the size of its input.
+4:12
+Then you have the forward method to define the flow of data, which is pretty straightforward.
+4:17
+No pun intended.
+4:18
+You pass data through each of the convolutional layers,
+4:21
+and then recall that the linear layer expects a single row of values,
+4:26
+so you need to flatten your tensor into a single vector and pass it through that final layer to produce a prediction.
+4:32
+And that's your full CNN pipeline, from raw pixels to learned features to classification.
+4:39
+So far, you've now seen how a CNN processes an image, starting with those learned filters that generate feature maps,
+4:46
+and then pooling to reduce the size and improve robustness,
+4:50
+and then finally classification through the fully connected layers.
+4:53
+So you can now understand the core theory, and in the next video,
+4:57
+I'll walk you through the code, step by step, to build a convolutional neural network using PyTorch.

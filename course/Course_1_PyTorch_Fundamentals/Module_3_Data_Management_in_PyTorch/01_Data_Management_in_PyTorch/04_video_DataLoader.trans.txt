@@ -1,0 +1,312 @@
+0:00
+In the last video, you cleaned up your data with transforms,
+0:03
+resizing images, converting them to tensors,
+0:06
+and normalizing the values.
+0:07
+Now it's time to tackle two more essentials.
+0:10
+First, we're gonna split your data
+0:12
+into training, validation, and test sets.
+0:14
+And then we'll use DataLoader
+0:16
+to batch and serve that data efficiently.
+0:19
+But more importantly, you'll see why these steps matter.
+0:22
+So let's get started.
+0:24
+If more data is a good thing,
+0:25
+why don't we just train our model
+0:27
+on the full set of flower images?
+0:29
+Well, here's the catch.
+0:30
+How would you know if your model works on new photos?
+0:33
+And that's why you would split your data set.
+0:35
+Typically, you split data sets into three parts,
+0:38
+one for training, one for validation, and one for testing.
+0:41
+Each serves a different purpose.
+0:43
+The training set is what your model learns from.
+0:46
+It sees these images over and over again during training.
+0:49
+The validation set helps you check performance
+0:52
+during training while you're still tuning things.
+0:55
+And the test set is your final check,
+0:57
+used only once after training's complete.
+0:59
+For Oxford flowers,
+1:00
+you might split that 8,189 images roughly like this,
+1:05
+5,700 for training, 1,200 for validation,
+1:08
+and the rest for testing.
+1:09
+Let's see how you do that in PyTorch.
+1:11
+For the training set,
+1:13
+take 70% of the total length of the data,
+1:15
+and then 15% for validation.
+1:18
+Now you can compute test size as the remainder,
+1:21
+and then you'll ensure that the splits
+1:23
+add up to the full data set and avoid rounding errors.
+1:26
+You'll see output like this.
+1:28
+The key is random_split.
+1:30
+It randomly assigns images to each set,
+1:33
+so you don't end up with all daisies in one
+1:36
+and all roses in the other.
+1:37
+This gives every split a good mix of the 102 flower types.
+1:41
+And just to be clear,
+1:42
+your original data set is not modified.
+1:45
+You're not slicing it up.
+1:46
+You're just creating three separate views of the same data.
+1:50
+So now you have three separate data sets
+1:52
+for training, validation, and testing.
+1:54
+In these courses, we'll be using a mix of these,
+1:57
+depending on the main purpose of the lecture.
+1:59
+To learn more about how these splits work
+2:02
+and why they're important,
+2:03
+check out the provided resources
+2:05
+or explore the data engineering specialization.
+2:08
+Next, you'll use DataLoader
+2:10
+to efficiently load batches from each set.
+2:12
+And this is especially important
+2:14
+during training for performance.
+2:16
+Remember that whole batch size equals 32?
+2:18
+That means you'll get 32 samples at a time
+2:21
+instead of just one.
+2:22
+But here's the interesting part.
+2:25
+Looping through a DataLoader
+2:26
+will give you one batch per iteration.
+2:28
+I've added a break to stop after the first batch
+2:31
+so you can inspect it.
+2:32
+Notice that each batch gives you two things,
+2:35
+a batch of images and a batch of labels.
+2:37
+For example, this means you have 32 images,
+2:40
+each with three color channels, each size 224 by 224.
+2:44
+The label tensor here gives you one label
+2:47
+for each image in that batch.
+2:50
+That break was a great way to inspect the first batch,
+2:53
+but you can also use this pattern.
+2:55
+And this is handy for quick debugging
+2:56
+without starting a loop.
+2:58
+Now, we need to add one crucial parameter
+3:00
+to our DataLoaders, and that's shuffle.
+3:02
+Why would you shuffle the training data?
+3:04
+Well, there's two key reasons.
+3:05
+First, if your dataset is ordered daisies first,
+3:08
+then roses, and then sunflowers,
+3:10
+your model might learn to associate position
+3:13
+with flower type instead of learning the actual features,
+3:16
+and that's not helpful for real-world predictions.
+3:19
+Second, if the model sees only daisies for many batches
+3:23
+and then only roses,
+3:24
+it can actually forget what it learned about daisies.
+3:27
+Shuffling will mix flower types in each batch,
+3:30
+and it will help the model retain everything
+3:32
+that it's learning.
+3:33
+So why then would we set shuffle equals false
+3:36
+for validation and test?
+3:38
+Well, that's simple.
+3:39
+Your model is not learning from these sets.
+3:41
+It's just being evaluated, so shuffling isn't needed,
+3:44
+and those problems we saw earlier wouldn't apply.
+3:46
+One more important clarification.
+3:48
+Shuffle only affects how DataLoader serves up the batches.
+3:52
+Your original dataset remains unchanged.
+3:55
+So now let's clear up a common source of confusion
+3:58
+around batches and epochs.
+4:00
+Here's the math.
+4:01
+You can't have 0.125 of a batch,
+4:04
+so you get 179 full batches of 32 images
+4:07
+and one partial batch with four images.
+4:10
+That's the remainder that was left over
+4:11
+for a total of 180 batches.
+4:13
+One epoch means you're going through all 180 batches once,
+4:18
+seeing every image in your dataset exactly one time.
+4:21
+So let's verify this.
+4:22
+You can see in this code that you're printing the length
+4:25
+of the last three batches, and here's the output.
+4:27
+Do you see that last batch with only four images?
+4:30
+Well, that's normal.
+4:31
+It's just the leftover images
+4:33
+that did not make up a full batch.
+4:34
+And this can confuse people sometimes
+4:36
+when they expect every batch to be exactly the same size.
+4:39
+So when you train for 10 epochs,
+4:41
+you're going through all 180 batches 10 times.
+4:45
+Your model sees each image 10 times in total,
+4:48
+but in a different random order each epoch,
+4:50
+thanks to that shuffle equals true.
+4:52
+Now let's wrap up this video
+4:54
+by looking at two common mistakes
+4:56
+that can cause major problems
+4:58
+as your DataLoader tries to access samples.
+5:01
+And here's one that I see all the time.
+5:02
+You can see that I'm loading the entire CSV file
+5:05
+from disk into memory every time __getitem__ is called.
+5:08
+If your dataset has 5,732 entries,
+5:12
+that means that the full CSV,
+5:14
+all of those entries is reloaded
+5:16
+every time you retrieve a single sample.
+5:18
+So that's 5,732 times per epoch.
+5:22
+So if you train for 10 epochs,
+5:24
+that's over 57,000 full loads of the same file,
+5:28
+which is a massive and unnecessary slowdown.
+5:30
+The fix is simple, load once in init.
+5:33
+And here's another common pitfall.
+5:35
+If you get CUDA out of memory errors,
+5:37
+the first thing to do is to try reducing your batch size,
+5:40
+start with 32 or even 16,
+5:42
+and then work your way up to fit available memory.
+5:45
+So now let's put everything that we've learned into practice.
+5:47
+The output shows everything is working correctly,
+5:50
+proper shapes, correct splits, and efficient loading.
+5:53
+You now have a complete data pipeline
+5:55
+for the Botanical Garden app,
+5:57
+from those messy mat files
+5:58
+all the way to efficient batch loading.
+6:00
+And in the next video,
+6:01
+we'll take a quick look at ways
+6:02
+that you can bug proof that pipeline.
+6:05
+I'll see you there.

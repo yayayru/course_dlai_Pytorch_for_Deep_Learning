@@ -1,0 +1,112 @@
+0:01
+Welcome back. Now that you've seen how convolutional layers work, let's build a full CNN
+0:05
+for the Expanded Nature Classifier app. In this video, you'll explore a convolutional neural
+0:10
+network and train it on a small but diverse dataset of 32 by 32 color images, flowers,
+0:16
+insects, and small animals. I won't walk through all of the data loading and prep,
+0:20
+that's handled for you in the lab code. So let's jump straight into defining the network.
+0:24
+Here's the full architecture. It's similar to the one from earlier,
+0:28
+except now the images are in color and there are three convolutional blocks instead of two.
+0:32
+Focus on the input and output channels of each block. The first convolutional layer takes three
+0:38
+input channels, one for each of red, green, and blue, and it produces 32 output channels,
+0:43
+and this will mean that it will learn 32 different filters. You can think of this as the model seeing
+0:49
+three versions of the image, red only, green only, and blue only. Each of the 32 filters
+0:55
+picks up different patterns from that input. The second layer takes those 32 channels and produces
+1:01
+64. The third layer goes from 64 to 128, so the model is learning more filters as it goes deeper.
+1:08
+Each convolutional block is followed by a max pooling layer that cuts the height and width
+1:13
+of the image in half. So by the time the image passes through all three blocks,
+1:17
+its spatial dimensions have shrunk from 32 by 32 to just 4 by 4. After that, the feature maps
+1:23
+are flattened in the forward method and passed into a fully connected layer with 512 neurons.
+1:29
+This layer uses ReLU, just like before, and helps the model combine features into more abstract
+1:35
+representations. Then comes something new, a dropout layer. During training, this layer randomly
+1:41
+deactivates about 50% of the neurons. Now this might sound counterintuitive, why would we want
+1:46
+to turn off parts of our network? Well, let's look at an example. Imagine a model trained to classify
+1:52
+dogs versus wolves. This husky image was misclassified as a wolf. Can you guess why? Well,
+1:58
+it's not because the husky looks like a wolf, it's because the model was fixating on the snow in the
+2:02
+background. In the training set, some wolf images had snowy backgrounds and that was enough for the
+2:08
+model to start learning that snow means wolf. What's happening here is called co-adaptation.
+2:14
+Some neurons become specialized snow detectors and others start relying on them. The model then
+2:20
+gets lazy, it leans on shortcuts instead of learning robust features like body shape or facial
+2:25
+structure. Dropout breaks those shortcuts. By randomly turning off neurons during training,
+2:31
+dropout makes it risky to rely too much on any one pattern. If the snow detector neuron gets dropped
+2:37
+out, the model then has to find other cues, the ones that actually matter. In practice, dropout
+2:43
+rates typically range from 0.2 to 0.5 and you'll place dropout after activation functions but before
+2:50
+the final classification layer. Now, to be precise, if most wolf images in your dataset have snow and
+2:57
+dog images don't, that's a dataset problem. The model isn't overfitting, it's just learning the
+3:02
+only pattern it sees. But in typical real-world data, the patterns are not so clear-cut. Dropout
+3:08
+helps by encouraging the model to learn features that generalize, not just the ones that happen to
+3:13
+correlate. And finally, there's a second fully connected layer that outputs 15 values, one for
+3:19
+each class in your dataset. Once you've defined the model, you'll also set up an optimizer and a
+3:24
+loss function. In this case, we're using the cross entropy loss and the atom optimizer. In the graded
+3:29
+assignment, you'll also see weights decay applied to the atom optimizer. Like dropout, it's a
+3:35
+regularization technique that helps with generalization but it works differently. Instead
+3:40
+of turning neurons off, weight decay discourages the network from using very large weights. Why
+3:46
+would it do this? Well, it's because large weights can be a sign that the model is memorizing
+3:52
+specific patterns in the training data rather than learning features that generalize. Weight decay
+3:58
+adds a small penalty for large weights, nudging the model towards simpler and more robust solutions.
+4:03
+Now when you head to the lab, you'll get to see how the shape of your data changes as it flows
+4:08
+through the CNN. The first number you'll see in each shape is the batch size. So if you're training
+4:12
+with one image at a time, that number will be one. Each image starts with three channels, red, green,
+4:19
+and blue, and each channel is 32 by 32 values. As the image passes through each convolution and
+4:25
+pooling layer, the spatial size shrinks while the number of channels grows. By the final layer, the
+4:30
+model outputs 15 values, one for each class, representing the predicted class probabilities.
+4:36
+When I trained this model for just 10 epochs, the results actually look pretty good. You can
+4:41
+see it in the graphs here. On the left, the training loss steadily decreases. On the right,
+4:46
+the accuracy on new unseen data improves over time. And when you check out some sample predictions,
+4:53
+the model is surprisingly accurate, even with these small, low-resolution images. They may
+4:58
+look a little pixelated here, but that's just because we enlarged them from their original 32
+5:02
+by 32 size. So now it's your turn. Head to the notebook and explore how it all works in detail.

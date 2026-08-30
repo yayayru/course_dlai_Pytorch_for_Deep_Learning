@@ -1,0 +1,146 @@
+0:07
+In the last video, you built a dataset class that systematically loads all of the images
+0:05
+and labels from the Oxford Flowers dataset. But accessing the data is just the first step.
+0:10
+In this video, you'll tackle quality problems, the issues that keep raw images from working
+0:16
+with PyTorch models. You'll learn how to use PyTorch's transformation pipeline to handle
+0:21
+resizing, format conversion, and normalization. By the end, you'll understand how transforms work,
+0:27
+why their order matters, and how to debug when things go wrong. Whether these concepts are new
+0:31
+or familiar, you'll see exactly how PyTorch handles them. So let's see what happens when
+0:35
+we try to use our dataset as-is. Imagine your flower dataset is ready, and you create a data
+0:40
+loader just like in the last module. And then you get this error. This likely means your images have
+0:45
+different heights and widths. PyTorch can't stack them into a batch unless they're the same size.
+0:50
+Remember, image batches need to follow this format. Batch size, the channels, the height,
+0:55
+and the width. If the dimensions don't match, PyTorch throws an error. But that might not be the
+1:00
+only issue in this data. So let's start digging in to see what you're working with. These images
+1:05
+are all different sizes. They're likely taken with different cameras over the years, so variation,
+1:10
+of course, would make sense. But there's another issue, the data type. You're getting PIL or pillow
+1:15
+images, but PyTorch models expect tensors. So you've got two different problems. One is different
+1:21
+sizes, and the other is the wrong format. Now this is exactly what PyTorch's transform system is for.
+1:27
+Handling pre-processing in a clean, consistent way. Let's start with the size mismatch. PyTorch will
+1:33
+provide transforms that you can chain together to fix this, like resize, which sets the height and
+1:39
+width to 224. But wait, what if your image is a rectangle? What do you think will happen? It's
+1:43
+going to distort the image, stretching and squishing it to fit. A better approach is to use resize with
+1:49
+just a single value, and that will scale the shorter edge while keeping the aspect ratio. Then
+1:55
+you can use center crop to extract a square from the middle. Also, watch out for the name. If you
+2:00
+call your transform transforms with an S, you'll overwrite the PyTorch module and get some confusing
+2:06
+errors. So here's a quick debugging tip. When building transformation pipelines, test each step
+2:11
+individually so you can see exactly what's happening. Inspecting each step like this is the
+2:17
+key when debugging transforms. You can see exactly how your data changes and then catch issues early
+2:22
+on. Next up, you'll need to convert those pillow images into tensors. You've seen toTensor before,
+2:29
+but do you remember everything that it does? Let's inspect what toTensor actually does more closely.
+2:35
+First, here's the size of our pill image. It's 224 by 224 pixels. Now when you call toTensor on
+2:41
+this image, first, obviously it's going to turn that image into a tensor, but with some interesting
+2:46
+properties. So you can see that if you print out the shape, it has rearranged the dimensions by
+2:52
+adding a channels layer for the three color channels, red, green, and blue. And now pixel
+2:57
+values will normally range from 0 to 255, and toTensor will scale these values, dividing all of
+3:03
+them by 255, so that the values will all fall between 0 and 1. And as you can see from these
+3:08
+sample values from our tensor here, they do all fall between 0 and 1. Same pixel data, but a different
+3:14
+scale. This scaling will help networks learn. For one, it's helpful if all features are on the same
+3:20
+scale. Think about it. Increasing your age by 10 years is huge, but adding 10 millimeters to your
+3:25
+height is not. But a model will just see 10 in both cases. By scaling everything into a 0 to 1
+3:31
+range, a 10% change is always a 10% change, no matter the units. Plus, neural networks will do a
+3:38
+lot of multiplication, and big numbers like 255 can easily explode. So scaling can also help keep
+3:44
+the math stable. Now let's add one more transform, normalization. We've seen normalization before,
+3:50
+but let's take a closer look. While our intensity values now fall between 0 and 1, if your images
+3:56
+are mostly bright flowers, the values will cluster close to 1. If they've mostly dark backgrounds,
+4:03
+they'll cluster close to 0. And this leaves a lot of unused space, squeezing important detail
+4:08
+into a narrow range, and this makes it harder for the model to spot subtle differences.
+4:14
+Normalization using mean and standard deviation spreads those values out more evenly, and these
+4:20
+given values were predetermined to work very well in this case. So now your intensity values have
+4:25
+the right shape, scale, and distribution, making it easier for the network to learn what matters.
+4:31
+Now, when you're building a transform pipeline, it helps to know what kind of data each transform
+4:37
+expects. Before you run toTensor, you're working with a regular image in this example.
+4:42
+toTensor will act like a bridge. Once you cross it, you're in tensor land, and some transforms
+4:48
+only make sense on one side or the other. It used to be that image transforms like resize or
+4:54
+center crop only worked on images. So if you tried to use them after converting to a tensor,
+5:00
+it hit an error. These days, thankfully, TorchVision is more flexible. Many image transformations now
+5:05
+work on either side of our bridge, but that's not always the case. For example, normalize will only
+5:10
+work on tensors, and it will error if you try to run it on an image. So just be careful about which
+5:16
+side of the toTensor bridge you're on, so that you can use each transform the right way and avoid
+5:21
+subtle bugs in your pipeline. So now let's update our data set with the full transform pipeline.
+5:26
+And now for the moment of truth. Can we finally create that batch that crashed earlier? Perfect!
+5:32
+We now have four images in our batch, each has three color channels, and all exactly 224 by 224.
+5:38
+The values are properly normalized, and your Oxford flowers data set is hopefully now ready for
+5:43
+training. Now here's a quick tip. When you're building transform pipelines, you can pull a single
+5:47
+image from your data set, and this will apply the transform, and you can check this image to see if
+5:52
+everything looks right. If something looks wrong, you can retrieve a raw image from a data set and
+5:57
+then debug the issue by applying your transforms one at a time. And I can tell you this approach
+6:02
+has saved me countless hours of debugging. You've now solved the quality problems that were blocking
+6:08
+your data set from working with PyTorch models. You can resize images consistently, convert them
+6:14
+to the right format, and then normalize their values for optimal training. Your data is now
+6:19
+properly formatted, but you're not done yet. And in the next video, we'll build that complete data
+6:23
+pipeline, splitting your data set, batching it efficiently, and avoiding some common performance
+6:28
+pitfalls. These steps are critical for getting your model to train smoothly, and for scaling
+6:33
+up when things get much bigger. I'll see you there.

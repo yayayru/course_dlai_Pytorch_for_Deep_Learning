@@ -1,0 +1,146 @@
+0:00
+Welcome back. Last time you learned about PyTorch's dynamic computation graphs and how they give you incredible flexibility.
+0:06
+But that didn't solve the repetitive path of your CNN. You could have written that in any framework.
+0:11
+Well, there's a time for simplicity and a time for flexibility.
+0:15
+So let's explore when to embrace PyTorch's dynamic nature, when to keep things simple with sequential,
+0:21
+and most importantly, how to combine both approaches to write professional, maintainable code.
+0:27
+Let's look at your init method. You have nine separate layers following a pattern.
+0:31
+And here in the forward method, you're manually calling each of those nine operations in the exact same order that you define them.
+0:37
+People often wonder if you really need all of this redundancy between the init and the forward methods.
+0:43
+Why should you even bother with two methods?
+0:45
+Well, there's a good reason as it separates concerns as was suggested by the previous video.
+0:50
+The init method is there to define your model's architecture, the layers and their learnable parameters that will persist across training.
+0:58
+These will be the actual values that your model is learning.
+1:01
+While the forward method, in a sense, is defining the dynamic flow of your computation graph.
+1:06
+And it's this separation that enables PyTorch's flexibility.
+1:10
+But is this model using that flexibility? Well, no, it isn't.
+1:13
+Every image is just following the same path three times in a row and you're writing everything twice for no real benefit.
+1:19
+So let's fix this redundancy.
+1:20
+Because you could imagine the botanical garden client is calling and says,
+1:24
+the app is working great, but we're seeing some tricky butterfly species that all look similar.
+1:29
+Can you make the model deeper? Maybe add another convolutional block?
+1:33
+Sure. So you need to add a fourth block.
+1:35
+But remember, you have to add it in two places.
+1:38
+First is an init.
+1:39
+Whoops, you've already used relu4 for the fully connected layer.
+1:42
+So now you're playing a naming game.
+1:44
+Do you call this relu5?
+1:45
+Well, that's confusing. Why would block 4 use relu5?
+1:49
+And then you have to remember to add it to the forward.
+1:52
+This is how bugs creep in.
+1:53
+It's not uncommon to add layers to init and forget to call them in forward.
+1:57
+These issues might not cause errors, but your model is also not doing what you would expect.
+2:02
+The fix in this case, PyTorch's nnSequential to group layers that run in order.
+2:08
+Now in the forward, that's it.
+2:10
+You want to add that fourth block your client just asked for?
+2:13
+Well, now you can just update init.
+2:15
+No forward method change is needed.
+2:17
+No naming conflicts, no forgotten layers.
+2:19
+You define the sequence once and sequential handles the execution.
+2:23
+Look at that forward method.
+2:25
+Two lines for the sequential blocks instead of 15.
+2:28
+So you might be wondering, if sequential is so convenient, why not just use it for everything?
+2:33
+Well, remember from the last video, sequential forces a fixed linear path.
+2:38
+No conditional branches, no loops, no dynamic behavior.
+2:41
+It's essentially a static pipeline.
+2:43
+But if your model needed to, say, return two different outputs, it wouldn't be possible.
+2:47
+The good news, you don't have to choose one or the other.
+2:50
+And you can see that in the code that we looked at earlier.
+2:53
+But notice, it's still repeating the conv, relu, pool pattern three times in that sequential.
+2:59
+You can do even better with modular design.
+3:01
+Since you're repeating that same pattern, you can group those layers into a single block.
+3:05
+It keeps things cleaner and easier to reuse.
+3:09
+This is now a reusable building block, just like any built-in PyTorch layer.
+3:14
+Now, look how clean your CNN becomes.
+3:17
+Adding that fourth block? Well, just add a new conv block to features.
+3:21
+Want to change all blocks to use batch normalization?
+3:23
+Update conv block once and all three blocks will get the change.
+3:26
+This is modularity.
+3:28
+Building complex models from simpler, reusable parts.
+3:31
+You can even nest modules inside modules to create clean, scalable architectures.
+3:37
+So here's a quick workflow tip.
+3:38
+Start explicit, then refactor.
+3:41
+And when building something new, write everything out, even if it's repetitive.
+3:45
+It makes debugging easier and helps you see exactly what's happening.
+3:48
+Once it works, look for patterns.
+3:50
+Other repeated sequences? Well, use sequential.
+3:53
+Other reusable blocks? Create custom modules like conv block.
+3:56
+Think of it as a rough draft that you polish as you go along.
+3:59
+You're not writing redundant code because you don't know better.
+4:03
+You're doing it to understand and debug effectively.
+4:06
+You've now gone from defining every layer by hand to building clean, modular models just like the pros.
+4:12
+And speaking of understanding your models, in the next video, you'll explore how to inspect them.
+4:17
+You'll learn how to peek inside those sequential blocks, visualize your architecture, and see exactly what your model is doing.
+4:24
+I'll see you there.

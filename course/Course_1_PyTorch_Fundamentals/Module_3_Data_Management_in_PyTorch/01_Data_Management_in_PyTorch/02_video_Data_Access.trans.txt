@@ -1,0 +1,114 @@
+0:00
+In the last video, we saw how the Botanical Garden's earlier attempts at this flower identification app
+0:05
+failed because of poor data handling. So now it's time to tackle the first major issue,
+0:10
+data access. If you can't reliably load your data, well, nothing else matters. I'll show you
+0:16
+what goes wrong with messy datasets like Oxford Flowers and how to fix it using PyTorch's Dataset
+0:21
+class. So let's start by downloading the dataset and seeing what we're working with. I've provided
+0:26
+the download function for you. You'll explore the details in the lab, but in short, it fetches both
+0:31
+the image files and the labels. So now let's take a look at what we downloaded. We've got over 8,000
+0:38
+images, all with generic names like image0001.jpg. There's no organization by flower type, just a
+0:45
+flat list of numbered files. The labels are stored separately in this .mat file, a binary format used
+0:52
+by MATLAB. It maps each image to a flower category. So we've got images in one place and labels in
+0:58
+another place and another format entirely. We need a way to connect them cleanly and systematically.
+1:03
+In previous modules, you loaded data with pre-built datasets like MNIST. It already knew how to find
+1:09
+images and match them to the right labels. Oxford Flowers isn't pre-packaged like that, so you need
+1:15
+to show PyTorch how to work with it by building a Dataset class. A PyTorch Dataset class, a custom
+1:21
+one, needs to answer three questions. The first, __init__. How do I set it up and where's the data? Then
+1:27
+there's __len__. How many samples are there? And then there's __getitem__. When asked for a sample like image 42,
+1:34
+what should I return? These three methods are all PyTorch needs to work with any data format. So
+1:40
+let's implement them with Oxford Flowers. I'll start with __init__, and this is the setup method. Here's
+1:45
+where we'll tell our custom Dataset where to find everything and load any info that we need later.
+1:50
+The Dataset does need some setup. We're going to handle the file paths, we're going to read the
+1:54
+MATLAB file using SciPy, and we'll even fix the label indexing. And that's what makes it realistic.
+2:00
+You can explore the details in the lab, but here's the key takeaway. We now have access to all of the
+2:06
+image paths and their corresponding labels. So what's in that labels array? Well, let's take a look.
+2:11
+We have 8,189 labels. There's one per image. Each of these is a number from 1 to 102,
+2:19
+representing a flower type. It does look like the first 10 images are all labeled as type 1,
+2:24
+so the dataset does seem to be organized by category. But wait, the labels start at 1? Let's
+2:30
+double check that. Yeah, that's a problem. We have 102 flower types, but PyTorch expects
+2:36
+zero index labels. So instead of 1 through 102, we need to change this to 0 through 101.
+2:43
+It's the kind of detail that could quietly break your training. So we fix it by subtracting 1
+2:48
+from every label. Also, notice what we're not doing in __init__. We're not loading any images,
+2:55
+we're just setting up the info that we'll need to find them later. This is called lazy loading,
+2:59
+and it's critical. Loading all 8,189 images at once would use up gigabytes of memory. Instead,
+3:06
+we'll just store the paths and the labels. The actual image loading will happen later in __getitem__.
+3:12
+Next up is __len__. This one's simple. You return the total number of samples in the dataset.
+3:17
+Since you have one label per image, the length of the labels array tells PyTorch exactly how many
+3:22
+samples to expect. It uses this to properly iterate through your data during training.
+3:27
+Now for the most important method, __getitem__. Here's the idea. PyTorch gives you an index,
+3:32
+and your job is to return the data for that index. That's it. For this dataset, that might
+3:38
+mean something like PyTorch says, give me sample number 42, and you return the 42nd flower
+3:44
+image and its label. And that's the flower type that it represents. Here, the :05d pads
+3:50
+the index with zeros to match the file names. Remember things like image00042.jpg. We use PIL,
+3:58
+or pillow, Python's Imaging Library via image.open to load the image. Then we grab the corresponding
+4:05
+label from the labels array. So when PyTorch asks for index 42, it gets image 42 and its label.
+4:12
+That's the contract. You define what each sample looks like, and PyTorch will handle how, when,
+4:18
+and how often to call this method. Now let's make sure our dataset actually works. Oh, we got an
+4:24
+error. Well, let's check the folder. It looks like the images are named image0001, 0002, 0003,
+4:33
+etc. And that numbering starts at 1 and not 0. So when we ask for index 0, we're trying to load
+4:39
+image0000.jpg, but that file doesn't exist. So let's fix that in our __getitem__ method, and now
+4:47
+let's try again. Great. This is exactly why you always test your dataset early. A simple off by
+4:53
+one error like this could have broken everything later. If things are working now, your dataset is
+4:59
+successfully connecting images to labels. But a quick note, this pattern will work for any type
+5:04
+of data. The structure is always the same. Light setup, lazy loading. You've now built a custom
+5:10
+dataset that can systematically access over 8,000 images and labels without crashing memory. But
+5:16
+accessing that data is just the first step. In the next video, you'll tackle quality problems,
+5:22
+like what to do when your images come in all different shapes and sizes and formats. I'll show
+5:26
+you how to build a transformation pipeline that will then prepare your data for training, and I'll
+5:31
+see you there.

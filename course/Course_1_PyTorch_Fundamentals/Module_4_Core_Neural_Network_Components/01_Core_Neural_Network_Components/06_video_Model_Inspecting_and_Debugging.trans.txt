@@ -1,0 +1,65 @@
+yTorch error.
+3:40
+This one usually means the input to a linear layer did not match what the layer expected.
+3:45
+In real projects, the first thing most people check is the shape of the layer itself.
+3:49
+If the error happens at FC1, you can print its weight shape like this,
+3:54
+and that gives you the fastest answer.
+3:55
+But if you're not sure which layer is causing the issue,
+3:58
+or you want to inspect multiple layers at once, you can just use named parameters.
+4:03
+So FC1 expects 1024 inputs, but your model is passing in 2048.
+4:09
+Why the mismatch?
+4:10
+To trace the shape through your model, try printing it inside the forward pass.
+4:15
+Now you can see the shape that your features block is producing
+4:18
+and whether flattening is working as expected.
+4:21
+By combining model inspection, what FC1 expects,
+4:24
+with shape tracing, what it actually gets,
+4:26
+you can quickly pinpoint where things went off track.
+4:29
+That's how inspection and debugging work together.
+4:32
+And with that, you've reached the end of this video and the end of course one.
+4:36
+From a single neuron predicting delivery times
+4:39
+to a convolutional neural network, you've come a long way.
+4:42
+You've built a solid foundation in PyTorch, creating data pipelines,
+4:46
+building and training models, evaluating performance,
+4:49
+and inspecting what's happening under the hood.
+4:51
+This was the course that brought it all together,
+4:53
+the one that gets everyone speaking the same PyTorch language.
+4:57
+And now you're ready to move forward.
+4:59
+In the next course, you'll start building with more advanced tools
+5:02
+from the PyTorch ecosystem.
+5:04
+You'll work with visual data using TorchVision.
+5:06
+You'll explore text models, optimize hyperparameters,
+5:10
+and build training pipelines that are faster, more flexible,
+5:13
+and hopefully closer to real-world machine learning.
+5:15
+And this is where those strong foundations turn into serious capability.
+5:19
+I can't wait to see you there.
