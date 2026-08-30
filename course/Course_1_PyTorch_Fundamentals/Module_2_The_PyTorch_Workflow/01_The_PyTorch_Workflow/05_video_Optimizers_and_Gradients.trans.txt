@@ -1,0 +1,116 @@
+0:00
+In the last video you saw how loss functions measure how right or how wrong your predictions
+0:04
+are and this is the first critical step in every training loop. Now let's take a look at the next
+0:09
+two. In this video you'll discover how Backward figures out which weights caused any problems
+0:14
+and how optimizers can use that information to improve your model. By the end, hopefully you
+0:20
+won't just know how to use these tools, you'll also understand why they work. So let's take a
+0:25
+look. After measuring how wrong your predictions are with the loss function, the next step is to
+0:30
+figure out what caused that loss and that's what Backward does. Think back to how neural networks
+0:37
+work. Each neuron takes inputs, multiplies each by a weight, adds them up with a bias,
+0:43
+and then passes that through an activation function. Even in a small neural network you're
+0:48
+dealing potentially with thousands of weights and biases. So if we look at a simple example,
+0:53
+this network has 784 inputs, 128 hidden neurons, and 10 output classes. And it has over 100,000
+1:03
+weights between inputs and the hidden layers. There are 128 biases for the hidden layer and
+1:09
+there are 1,280 weights between the hidden layer and the output. And of course there are those 10
+1:15
+biases for the final output layer. And that's a total of 101,770 trainable parameters. So Backward
+1:22
+acts a little bit like a detective. It looks at every single weight and bias and asks,
+1:27
+how much did you contribute to the loss? These diagnostic scores are called gradients. They tell
+1:34
+you not just who contributed to the error, but how much and in what direction. Positive values mean
+1:39
+that increasing this weight will make the loss worse. Negative means that increasing this weight
+1:45
+would have helped. Large values have a big influence, small values barely mattered. But here's a common
+1:51
+misconception. People often think that Backward updates these weights. It doesn't. Backward only
+1:57
+calculates gradients. It figures out how much each weight contributed to the overall loss. The actual
+2:04
+updates will happen later when you call optimizer.step(). You can find course resources if you
+2:09
+want to learn more, but this course is focused on PyTorch and not Calculus. And the beauty of
+2:14
+PyTorch is that it handles all of that complexity for you. But what's really happening here? Your
+2:19
+goal is to try to minimize loss. Think of it as like standing on a hillside trying to reach the
+2:26
+bottom of a valley. The gradient tells you the slope at your position, which way is uphill or
+2:31
+which way is downhill. So to get to the bottom, you go in the downhill direction and that's going
+2:36
+towards lower loss. And that's why we call it gradient descent. The simplest approach is what
+2:42
+we've been using, stochastic gradient descent. SGD's strategy is straightforward. If your weight has a
+2:49
+negative gradient, then let's increase it. If your weight has a positive gradient, then we can just
+2:54
+decrease by going in the opposite direction. If it has a big gradient, we'll make a big change. If it has a
+2:59
+small gradient, we'll make a small change. But it doesn't just subtract the gradient directly, it
+3:04
+scales it first using the learning rate. So if your gradient for example is 0.5 and the learning rate
+3:10
+is 0.01, the learning rate will scale down any updates. And here's why this matters. In this case
+3:17
+a tiny learning rate has tiny steps. It will take forever to reach the bottom. A good learning rate
+3:24
+has steady progress all the way to the bottom. A huge learning rate has these giant leaps that can
+3:29
+bounce back and forth, overshooting the minima. So SGD can work great, but there are smarter optimizers
+3:36
+that can adapt to each weight individually. And one of those is Adam. It's kind of like having an
+3:41
+assistant that knows which weights need big adjustments and which ones need fine-tuning. Adam
+3:46
+has become a popular first choice optimizer because it's reliable, flexible, and often faster
+3:52
+than the alternatives. But a word of caution, don't copy the learning rate from SGD when using Adam
+3:58
+because your loss might explode. It's tuned completely differently. There are other optimizers
+4:04
+in PyTorch like RMSprop, AdaGrad, and a whole lot more. And if you're curious, check out the resources.
+4:10
+But for most projects, SGD and Adam have you covered. Now that you understand gradients as
+4:15
+diagnostic scores for each parameter, zero_grad begins to make a lot more sense. Every time you
+4:21
+call backward, PyTorch adds new gradients to whatever is already there. So if you don't call
+4:27
+zero_grad, you're not just diagnosing parameters for this batch, you're actually accumulating the
+4:33
+diagnoses from every batch. And the gradients will keep accumulating incorrectly until your training
+4:39
+breaks. So that's why you call optimizer.zero_grad() at the start of every training loop. Now you might
+4:45
+wonder, well why does PyTorch accumulate the gradients in the first place? It turns out that
+4:49
+this behavior is really useful for advanced use cases like gradient accumulation or certain custom
+4:56
+training schedules. But for most projects, including everything you'll do in this course, you're going
+5:01
+to want to clear those gradients every time. You can now understand the complete training loop.
+5:06
+Loss functions measure how wrong or how right the model is. Backward diagnoses how each parameter
+5:11
+contributes to the errors. Optimizers then use those diagnostic scores to update the weights.
+5:17
+Now before you start building your first classifier, I have one final PyTorch-specific topic to discuss,
+5:23
+and that's device management. And that means making your code run on GPUs for faster training.
+5:28
+And I'll see you there.

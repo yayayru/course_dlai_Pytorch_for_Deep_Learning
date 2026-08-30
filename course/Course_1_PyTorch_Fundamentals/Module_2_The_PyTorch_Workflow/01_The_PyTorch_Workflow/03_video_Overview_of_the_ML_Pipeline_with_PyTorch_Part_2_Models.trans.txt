@@ -1,0 +1,139 @@
+
+2:14
+You've seen this training loop already in module 1.
+2:17
+This standard sequence is the core of most PyTorch training loops.
+2:21
+Zero grad clears out all the old calculations,
+2:24
+backwards figures out the improvements,
+2:26
+and step updates your model.
+2:28
+But here's the thing.
+2:29
+If you don't follow this standard order,
+2:31
+your training might fail silently.
+2:34
+PyTorch won't throw an error,
+2:35
+but your model won't learn properly.
+2:37
+For example, what would happen if you swapped backwards and step?
+2:40
+Your code runs fine,
+2:41
+but the model updates itself based on the previous batch's calculations,
+2:46
+and not the current ones.
+2:47
+Or if you put zero grad after backward,
+2:50
+well, then you just threw away all of that work that backward did.
+2:53
+What if you put zero grad outside the loop?
+2:55
+Well, those calculations just pile up.
+2:57
+Each batch will add to the previous one,
+2:59
+and your model starts making huge adjustments
+3:01
+when it should just make tiny ones.
+3:03
+The next two videos will take a deeper dive into these topics.
+3:06
+For now, just remember that this pattern is important.
+3:10
+You almost always want the same order every time.
+3:13
+You've been training your model,
+3:14
+but how do you know it's actually learning?
+3:17
+That's what evaluation is for.
+3:19
+Testing your model on new data
+3:21
+that it hasn't previously seen and wasn't trained on.
+3:24
+Two critical things here.
+3:26
+Model.eval.
+3:27
+Be careful.
+3:28
+This is not a method that evaluates your model
+3:31
+as some people mistakenly think.
+3:33
+It just sets the model into evaluation mode.
+3:36
+You need this because it's both more efficient computationally,
+3:40
+and some layers in your model will behave in different ways
+3:44
+during training and evaluation.
+3:46
+Torch.nograd.
+3:47
+This will disable that extra tracking
+3:49
+that PyTorch does during training.
+3:51
+If you don't turn it off,
+3:53
+PyTorch will keep storing lots of details
+3:55
+even when they're not needed,
+3:57
+and this wastes memory
+3:58
+and might even crash your program during validation.
+4:01
+Now, the most important part of evaluation
+4:03
+is to see how well your model has performed
+4:06
+on new data that it hasn't seen before.
+4:08
+Testing on the training set
+4:09
+would be like giving the student the same test twice.
+4:12
+The student might just memorize the answers,
+4:14
+but you want to see if they can apply
+4:16
+what they've already learned.
+4:18
+Since you're exploring image classification in this module,
+4:21
+you can easily measure performance using accuracy.
+4:24
+The accuracy calculation is straightforward.
+4:26
+Count how many times the model gets the classification right
+4:29
+and divide that by the total attempts.
+4:31
+If your model predicts 9,500 digits correctly out of 10,000,
+4:35
+that's 95% accuracy.
+4:37
+And don't forget to switch back to training mode
+4:40
+if you are returning the model to training.
+4:42
+You've now revisited the full pipeline,
+4:44
+data loading, model building, training, and evaluation,
+4:48
+but you've only scratched the surface of training.
+4:50
+And in the next two videos,
+4:51
+we're going to take a closer look
+4:53
+at what's happening with loss functions and optimizers.

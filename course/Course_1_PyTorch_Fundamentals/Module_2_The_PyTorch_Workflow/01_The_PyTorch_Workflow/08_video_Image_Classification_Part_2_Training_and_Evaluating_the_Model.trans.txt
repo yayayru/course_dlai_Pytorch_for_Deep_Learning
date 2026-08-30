@@ -1,0 +1,92 @@
+0:00
+Welcome back. In the last video, you saw how to build the two key components, a data pipeline
+0:04
+that loads MNIST images, and a neural network architecture that can process them. But if you
+0:09
+run the model right now, you'll just be guessing. In this video, we're going to walk through the
+0:13
+code that actually trains that model step by step. Let's start by setting up everything that you need
+0:18
+for training. First, device selection. If CUDA is available, you'll use the GPU. Otherwise,
+0:23
+PyTorch is going to fall back to the CPU. Then, let's create the model and move it to the device
+0:29
+using .toDevice. Remember, both your model and your data need to be on the same device. Otherwise,
+0:36
+you'll get an error during training. You're going to be using cross-entropy loss as your loss
+0:40
+function. And as you saw earlier, it's designed for classification tasks, where the model will
+0:45
+pick one class out of many. And that's perfect for choosing a digit from 0 through 9. And you're
+0:50
+using the Adam optimizer with a learning rate of 0.001. You've already seen how Adam adapts
+0:56
+its learning rate as it trains by making larger adjustments early when gradients are noisy and
+1:02
+then smaller corrections later as your training stabilizes. So now, let's create a function to
+1:07
+train our model for one epoch. The function takes in five inputs. Your model, the data loader,
+1:14
+the loss function, the optimizer, and the device that everything should run on. You'll start with
+1:19
+model.train and this puts the model into training mode. You'll set up three tracking variables.
+1:25
+Running loss accumulates the loss values, correct counts predictions that match the true labels,
+1:30
+and total counts all of the samples that you've seen so far. Next, we're going to loop over all
+1:35
+of the batches. And in each batch, we're going to move the data and the target to the right device,
+1:41
+clear any leftover gradients with optimizer.0grad. We'll then run a forward pass by calling the
+1:47
+model and passing it the data to get outputs. We'll compute the loss by calling the loss function.
+1:52
+We'll back propagate with loss.backwards and then we'll update the weights with optimizer.step.
+1:58
+And then you track your progress. Loss.item gives us the label value and output.max tells us
+2:04
+which digit class got the highest score and lets you compare that to that label value. Every 100
+2:10
+batches, you're going to print out the current loss and accuracy. With 60,000 training images
+2:15
+and batch size 64, that's about 938 batches per epoch. So you're going to see around nine updates.
+2:22
+Notice what's happening here. Look at the loss number. It's dropping from 0.64 to about 0.17,
+2:29
+while your accuracy climbs from about 81% to about 95%. And that's just in a single pass
+2:36
+through the training set. And look how little code it took to make all of that happen.
+2:40
+But training is only half of the story. You need to test your model on new unseen data.
+2:45
+There are two key differences from training. First, model.eval will switch you into evaluation mode.
+2:51
+Second, you're going to wrap everything in a with torch.nograd. During evaluation, you're not
+2:57
+training, so you don't need gradients. This will save memory and speed everything up. The evaluation
+3:03
+itself is pretty straightforward. You're going to run each batch through the model. You're going to
+3:07
+find which class got the highest score with output.max. You're going to count how many predictions
+3:12
+match the true labels, and then you can return the accuracy percentage. No optimizer, no loss
+3:17
+tracking, no weight updates, just how many did you get right. Now you have your training function
+3:22
+and your evaluation function. Let's put them all together. You'll train the model for 10 epochs.
+3:27
+That's 10 full passes through the entire training data set. But it's not just repetition. With each
+3:33
+pass, the model refines its understanding of what makes a 2 different from a 7. After each training
+3:39
+epoch, you're going to evaluate on the test set to see how well it performs on unseen data. This
+3:45
+tells you if the model is actually learning generalizable patterns or if it's just memorizing
+3:50
+the training data. And here's what you'll see. By epoch 10, you'll notice something really satisfying.
+3:56
+The loss is tiny and the accuracy is high. When your accuracy stops improving, it's often a sign
+4:01
+that your model is done learning for now, so you may not even need all 10 epochs. And that's it.
+4:07
+You're ready to train your first image classifier in PyTorch. Head over to the lab and give it a try.

@@ -1,0 +1,116 @@
+0:00
+Hi and welcome back. So far you've seen how to load data, manage devices, measure loss,
+0:05
+and update weights. Now let's bring it all together and build your first image classifier
+0:10
+with PyTorch. You're working with MNIST, those handwritten digits that you saw earlier. This
+0:14
+data set has 60,000 training images and 10,000 test images. Each of these are 28 by 28 pixels
+0:20
+in grayscale. It's the perfect warm-up before tackling Andrew's letter in the assignment.
+0:25
+So let's jump into the code and build a model. We'll start with the data pipeline. First you
+0:30
+need to import TorchVision, and this is PyTorch's computer vision library. It comes built in with
+0:36
+popular data sets like MNIST, as well as tools for image processing. Remember transforms? Well
+0:41
+here you're applying them to MNIST. ToTensor converts the images to tensors and then scales
+0:47
+the pixels from 0 to 255 down to a range of 0 to 1. Normalize then shifts and scales those values
+0:54
+so they're centered around 0. Now what are these numbers 0.1307 and 0.3081? Well they are the mean
+1:02
+and standard deviation of the entire training set. By normalizing every image with the same values
+1:08
+you make the data more consistent, and that helps the model learn faster. We'll see more on that in
+1:14
+the next module. Now let's load in the data sets. For the training data set, root equals dot slash
+1:19
+data says just simply where to store the files on your computer. Train equals true tells it that
+1:25
+you want the 60,000 training images. Download equals true means that if MNIST isn't already
+1:31
+there, go ahead and download it. And transform applies those pre-processing steps that you just
+1:36
+defined to every image automatically. The test data set is almost identical. Just use train equals
+1:42
+false to get the 10,000 test images instead of the training ones. Got to use the same transforms,
+1:48
+the same storage location, and all of that. TorchVision will handle all of the downloading
+1:52
+and organizing for you. Now onto data loaders. For training you're setting the batch size to be 64.
+1:59
+That means it's 64 images in each batch. With shuffle equals true, for every epoch the model
+2:05
+will see the images in a different random order. The test loader uses batch size equals a thousand.
+2:11
+These are much larger batches because we don't need to calculate gradients, we're only testing.
+2:16
+But notice something interesting. The training data is shuffled,
+2:19
+but the test data isn't. Take a moment to think about why that might be.
+2:25
+Well, data sets often come organized by class. If you don't shuffle, your model might see 6,000
+2:31
+zeros in a row before seeing any ones. It could learn unintended patterns like early batches are
+2:38
+zeros, late batches are nines, instead of actually learning what makes a zero look like a zero.
+2:45
+Shuffling will mix everything up so that each batch has variety in it. The model learns the
+2:50
+actual features of each digit and not just their position in the data set. But for testing, well,
+2:56
+the model's done learning. You're just checking if it can recognize digits correctly. Order doesn't
+3:00
+matter then. So now it's time to create your neural network. You're going to go beyond sequential and
+3:05
+we'll build a custom architecture. Let's walk through this. You're creating a class that
+3:10
+inherits from nn.module. This gives you all of PyTorch's neural network functionality. In its
+3:16
+init, you're going to define your layers. First comes flatten. This is new. Here's why you need
+3:22
+it. MNIST images arrive as tensors with a specific shape. When PyTorch loads a single MNIST image,
+3:29
+it gives you a 1, 28, 28-dimensional tensor. And that's the channels, the height, and the width.
+3:35
+The one channel means that its grayscale is just a single brightness value from 0 to 255 for each
+3:42
+pixel. 28 by 28 pixels are the size and those are the other two channels. But when you're training
+3:47
+on batches, PyTorch will actually add another dimension. So with batch size equals 64,
+3:53
+your data arrives as 64 comma 1 comma 28 comma 28. So that's 64 images, each one channel,
+4:02
+and each is 28 by 28 pixels. Here's the issue. Linear layers expect flat vectors, and that's
+4:08
+one long row of numbers per image, not two-dimensional grids. And that's what flatten
+4:13
+does. It takes each of your 28 by 28 images and reshapes them into 784 values in a row. Why 784?
+4:20
+Because 28 by 28 equals 784. So now your batch, instead of being dimension 64, 1, 28, 28, just
+4:28
+simply becomes 64 by 784. Without flatten, you get a shape mismatch error when your image data
+4:34
+hits the linear layer. So now you can stack your layers with sequential. Linear, 784, 128,
+4:40
+takes those 784 pixel values and transforms them to 128 hidden features. ReLU is our activation
+4:48
+function that keeps our positive values and zeros out the negatives. Then linear, 128, 10,
+4:53
+takes the 128 features and turns them into 10 outputs. 10 outputs being one for each digit class.
+4:59
+We've 10 digits from 0 through 9. Now you're going to define the flow of the data in that
+5:04
+forward method. Take the input, flatten it, pass it through your layers, return the output. So now
+5:10
+you have everything ready. A data pipeline that loads and pre-processes MNIST images, and a neural
+5:15
+network that can process those images. But right now this model doesn't know a zero from a nine.
+5:20
+In the next video, you're going to see how to bring this model to life with training. You'll
+5:24
+see how to set up the optimizer, define the training loop, and watch as your model learns
+5:29
+to recognize digits with increasing accuracy. Let's keep going!

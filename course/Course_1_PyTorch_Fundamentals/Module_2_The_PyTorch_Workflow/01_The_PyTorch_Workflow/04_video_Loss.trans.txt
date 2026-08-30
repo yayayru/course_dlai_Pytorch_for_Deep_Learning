@@ -1,0 +1,184 @@
+0:00
+As you move through this professional certificate, you'll see these three lines come up again and again and again during training.
+0:06
+They're simple to write, but a lot happens behind the scenes.
+0:09
+PyTorch will take care of the complex math for you, but in this video, you'll take a quick look under the hood to understand what each line really does and why the order matters.
+0:20
+These three lines will work together in this sequence.
+0:22
+Measure, Diagnose, Update.
+0:25
+First, you'll measure how wrong your predictions are, and that's your loss.
+0:29
+This one number that sums up all of your mistakes.
+0:32
+And then, backward diagnoses the problem.
+0:35
+It examines how each weight in your model contributed to the error, which weights made things worse, and by how much.
+0:42
+Finally, optimizer.step updates the weights.
+0:46
+It uses those diagnostic scores to adjust each parameter.
+0:49
+The weights with the bigger problems will get bigger corrections.
+0:53
+In this video, you're going to focus on the first step, and that's measuring loss.
+0:57
+You've already seen one kind of loss function called mean squared error, which works really well for tasks like we had when we were predicting delivery time.
+1:05
+You'll also meet a new loss function, cross-entropy loss, and this is used for classification problems.
+1:12
+I'll break down how these loss functions work and how to choose the correct one for your task.
+1:16
+Every loss function does the same basic job.
+1:19
+It compares your model's predictions to the true answers and then gives you a number.
+1:23
+The higher the number, the more wrong you are.
+1:25
+Back in the delivery company example, you used the model to predict delivery time based on distance.
+1:31
+Now, let's say your model makes two predictions.
+1:34
+The first prediction, the model predicted six minutes, but the actual time was four.
+1:38
+For the second prediction, say it predicted three minutes, but the actual time was five.
+1:42
+To figure out how far off you were, you subtract the target from the prediction, and that gives you the error.
+1:47
+It's like measuring the distance between your guess and reality.
+1:51
+So how wrong was your model overall?
+1:53
+Well, loss here is the average error across all of those predictions.
+1:57
+Think of it like a report card for your model.
+1:59
+The lower the score, the closer your predictions are to reality on average.
+2:04
+But if you average out the raw errors, in this case it was plus two and minus two,
+2:08
+and you divide that by two because there's two of them, you get zero.
+2:11
+It looks like perfect performance, even though both predictions were actually wrong.
+2:15
+And this is why you use mean squared error and you square the differences.
+2:19
+It gets rid of the minus signs.
+2:21
+So now both mistakes count and they don't cancel each other out.
+2:24
+And that's where that name comes from, mean squared error.
+2:28
+And there's one more benefit.
+2:29
+Squaring makes bigger mistakes matter more.
+2:32
+Being off by 10 minutes is much worse than being off by one.
+2:35
+So MSE loss, mean squared error loss, helps in these two ways.
+2:40
+Number one, it makes sure that all mistakes count.
+2:42
+And number two, it punishes bigger errors more than it punishes smaller ones.
+2:47
+Mean squared error is perfect when you're predicting continuous values,
+2:51
+things like distances, temperatures or prices.
+2:54
+But in this module, you're tackling classification.
+2:57
+What digit is this?
+2:58
+And here you're going to need a different loss function.
+3:01
+We'll use one called cross-entropy loss.
+3:04
+With cross-entropy loss, your model isn't just picking an answer,
+3:07
+it outputs a confidence score for all possible answers or classes.
+3:11
+Take MNIST, your model must choose between digits zero through nine.
+3:16
+So for each image, it outputs 10 numbers, a probability for each digit.
+3:22
+This means I'm 70% sure it's a three, maybe 8% sure it's a two,
+3:27
+but it could be a zero.
+3:28
+And all of those scores should add up to 100%.
+3:30
+Now here's the key idea.
+3:32
+Cross-entropy loss punishes overconfident wrong answers.
+3:37
+If your model says it's 95% sure that this is a seven,
+3:41
+but it's actually a three, that's a big mistake
+3:43
+and the loss will be very high.
+3:45
+But if it's only 55% sure it's a seven,
+3:48
+it's still wrong, but not as confident, so the loss will be smaller.
+3:52
+You want your model to be confident about the right answers
+3:56
+and unsure about the wrong ones.
+3:58
+Cross-entropy loss helps shape that behavior.
+4:01
+Now here's one important warning.
+4:03
+Do not mix up your loss functions.
+4:05
+Using MSE loss for classification might work, but poorly.
+4:09
+Training will be slow and potentially unstable.
+4:12
+Are you using cross-entropy loss for regression?
+4:14
+It'll probably break because it expects probability distributions
+4:18
+and not continuous values.
+4:20
+And also don't compare their raw numbers.
+4:22
+My MSE is 0.08, but cross-entropy gives 2.3, which is better.
+4:27
+Well, that's just like comparing two completely different things.
+4:30
+Same idea, different scale.
+4:32
+Just make sure that the number goes down during training.
+4:35
+The goal is to minimize loss.
+4:37
+So when would you use which loss function?
+4:40
+Well, if you're predicting a number such as temperature,
+4:43
+price, or distance, use MSE.
+4:45
+And if you're predicting a category, like a digit, animal, or word,
+4:49
+use cross-entropy loss.
+4:50
+There are lots of other loss functions out there, of course,
+4:52
+and each are suited to specific situations.
+4:55
+If you're curious, check out the resources below to explore them further.
+4:58
+But for now, the great news is that MSE and cross-entropy loss
+5:02
+cover a lot of territory in deep learning tasks.
+5:06
+So that's the measure part of our sequence.
+5:08
+In the next video, you're going to explore how PyTorch diagnoses the problems
+5:13
+and makes those updates.
+5:15
+I'll see you there.

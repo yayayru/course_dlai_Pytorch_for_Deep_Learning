@@ -1,0 +1,88 @@
+0:00
+Welcome back. As you start working more with tensors and models in PyTorch, there's something
+0:05
+important that you need to understand early on. Every tensor and every model lives on a device.
+0:11
+Now that could be your CPU, or a GPU, or other accelerator if one is available. And here's the
+0:16
+key. PyTorch will not move things around for you automatically. And if your tensors and models
+0:22
+aren't all on the same device, your code may not run. It could crash with an error like this.
+0:27
+In this video, you'll learn how to control where your data and computations live, and how to avoid
+0:32
+one of the most common errors people run into when they get started with PyTorch. Every computer has
+0:38
+a CPU, and that's the default device PyTorch uses unless you tell it otherwise. CPUs are built for
+0:44
+general purpose work and run operations sequentially. But some systems also have an
+0:49
+accelerator like a GPU, a graphics processing unit, which can run tensor operations much faster,
+0:56
+especially during training. In fact, training on an accelerator like a GPU can be 10 to 15 times
+1:01
+faster than on a CPU alone. So if your system has one of these, you'll almost always want to use it.
+1:07
+But you do need to ensure that your model and data are both on the same device, and you'll do this
+1:12
+manually. So let's start with checking whether your system has an accelerator. PyTorch gives you
+1:17
+a simple way to do it using the following code. If this returns true, then PyTorch can use a GPU
+1:24
+to accelerate your computations. A common pattern for choosing a device looks like this. This sets
+1:30
+the device to CUDA if a GPU is available and CPU otherwise. It is a safe default and one you'll
+1:37
+often see in PyTorch code. The CUDA keyword refers to NVIDIA GPUs that have a toolkit called CUDA.
+1:44
+Now while there are other options like MPS for Apple Silicon, CUDA is the most commonly used one
+1:50
+and it's what the labs in this course will be using also. Once you've defined your device, the
+1:55
+next step is to move your model and your data onto it. First you can move your model when you create
+2:00
+it like this. This puts the model's parameters onto the selected device. Then within your training
+2:06
+loop, move each batch of data like this. Now if you're not sure where something lives, you can
+2:12
+always check. For tensors it's pretty straightforward. For models it's a bit different. Models themselves
+2:17
+aren't on the devices but their parameters are. So you can check one parameter to see where they all
+2:22
+are. If you're getting device errors, you should also double check that your targets and the output
+2:27
+of your model are also on the same device too. Now there's one common mistake to watch out for
+2:33
+when you use .to(). It doesn't change the tensor in place, it actually creates a new one. So if you
+2:40
+want to actually move the tensor, you need to reassign it. Anytime you use .to(), make sure you're
+2:47
+assigning the results to a variable that you will actually use. Now here's what a complete training
+2:53
+loop looks like with proper device management. The key steps are choose your device up front,
+2:59
+move the model once, and then move the data in every batch. This pattern is the foundation of
+3:05
+every training script that you'll write in PyTorch. Even when everything's on the right device,
+3:10
+there's one more thing to watch out for. The GPU memory. Because it is limited. If your model and
+3:16
+batch size take up more memory than the GPU has available, you'll see an error like this. And
+3:22
+that's why batch size matters. Small batches make training slow, large batches too large, and you
+3:28
+might exceed your GPU's memory and cause a crash. For many systems, a batch size between 32 and 64
+3:34
+is a good starting point, but it does depend on your hardware and on your model architecture. If
+3:39
+you see a memory error, first try lowering your batch size. It is the most common fix. Get device
+3:45
+management right early, and you'll avoid one of the most frustrating classes of errors in PyTorch.
+3:50
+And when something does go wrong, you'll know exactly what to check. You've now seen how to
+3:54
+manage devices, and with everything you've learned so far, you're ready to put it all together. In the
+3:59
+next video, you'll see how to train your first image classifier in PyTorch, bringing that full
+4:03
+pipeline to life. I'll see you there.
